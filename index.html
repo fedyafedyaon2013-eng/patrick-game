@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Патрик Стар</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Comic Sans MS', sans-serif; background: linear-gradient(180deg, #0074D9, #001f3f); color: white; overflow-x: hidden; }
+        .bubbles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; }
+        .bubble { position: absolute; bottom: -100px; background: rgba(255,255,255,0.15); border-radius: 50%; animation: rise 8s infinite ease-in; }
+        @keyframes rise { 0% { bottom: -100px; } 100% { bottom: 110%; } }
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,31,63,0.95); z-index: 1000; padding: 15px 0; }
+        nav ul { display: flex; justify-content: center; list-style: none; gap: 20px; flex-wrap: wrap; }
+        nav a { color: #FFB6C1; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+        nav a:hover { color: #FF69B4; }
+        section { min-height: 100vh; padding: 100px 20px 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        #home h1 { font-size: 4rem; color: #FF69B4; text-shadow: 4px 4px 0 #001f3f; margin-bottom: 20px; }
+        #home p { font-size: 1.3rem; max-width: 600px; margin-bottom: 30px; color: #FFB6C1; }
+        .btn { background: #FF69B4; color: white; padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,105,180,0.4); }
+        .btn:hover { transform: scale(1.05); }
+        .btn-small { padding: 8px 18px; font-size: 0.9rem; }
+        .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .btn-admin { background: linear-gradient(135deg, #FF1744, #D50000); }
+        .section-title { font-size: 2.5rem; color: #F4A460; margin-bottom: 40px; text-shadow: 2px 2px 0 #001f3f; }
+        .bio-container { background: rgba(255,182,193,0.15); border: 3px solid #FF69B4; border-radius: 25px; padding: 30px; max-width: 700px; text-align: left; line-height: 1.8; }
+        .friends-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 900px; width: 100%; }
+        .friend-card { background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; border-top: 5px solid #FF69B4; }
+        .friend-card h3 { color: #F4A460; margin-bottom: 10px; }
+        .quote-generator { background: #FF69B4; padding: 40px; border-radius: 25px; max-width: 700px; width: 100%; font-size: 1.6rem; font-style: italic; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-height: 150px; display: flex; align-items: center; justify-content: center; position: relative; transition: opacity 0.3s; }
+        .quote-generator::before { content: "\1F4AD"; position: absolute; top: -30px; left: 30px; font-size: 3rem; font-style: normal; }
+        .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; width: 100%; }
+        .fact-card { background: rgba(255,255,255,0.1); border-left: 5px solid #F4A460; padding: 25px; border-radius: 15px; text-align: left; }
+        .fact-card h3 { color: #FF69B4; margin-bottom: 10px; }
+        .game-wrapper { background: rgba(0,31,63,0.6); border: 3px solid #FF69B4; border-radius: 25px; padding: 20px; max-width: 450px; width: 100%; }
+        .player-info { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .game-info { display: flex; justify-content: space-around; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; }
+        .game-info span { background: #FF69B4; padding: 8px 20px; border-radius: 20px; }
+        #gameCanvas { width: 100%; height: auto; border-radius: 15px; display: block; touch-action: none; border: 3px solid #F4A460; background: #0288D1; }
+        .game-controls { margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .game-hint { margin-top: 15px; font-size: 0.95rem; color: #FFB6C1; line-height: 1.6; }
+        .leaderboard-wrapper { background: rgba(0,31,63,0.7); border: 3px solid #FFD700; border-radius: 25px; padding: 30px; max-width: 600px; width: 100%; }
+        .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 20px; }
+        .leaderboard-table th { background: #FFD700; color: #001f3f; padding: 12px; font-size: 1rem; text-align: left; }
+        .leaderboard-table th:first-child { border-radius: 10px 0 0 10px; text-align: center; width: 60px; }
+        .leaderboard-table th:last-child { border-radius: 0 10px 10px 0; text-align: right; }
+        .leaderboard-table td { background: rgba(255,255,255,0.1); padding: 12px; font-size: 1rem; }
+        .leaderboard-table td:first-child { border-radius: 10px 0 0 10px; text-align: center; font-weight: bold; font-size: 1.2rem; }
+        .leaderboard-table td:last-child { border-radius: 0 10px 10px 0; text-align: right; font-weight: bold; color: #FFD700; }
+        .leaderboard-table tr.current-player td { background: rgba(255,105,180,0.3); }
+        .leaderboard-table tr.admin-row td { background: rgba(255,215,0,0.15); }
+        .empty-leaderboard { text-align: center; padding: 40px 20px; font-size: 1.1rem; color: #FFB6C1; }
+        .leaderboard-actions { margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .admin-only { display: none; }
+        .admin-only.visible { display: inline-block; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: linear-gradient(135deg, #0074D9, #001f3f); border: 3px solid #FF69B4; border-radius: 25px; padding: 40px; max-width: 400px; width: 100%; text-align: center; }
+        .modal h2 { color: #FFD700; font-size: 1.8rem; margin-bottom: 15px; }
+        .modal p { color: #FFB6C1; margin-bottom: 25px; font-size: 1rem; }
+        .modal input { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #FF69B4; border-radius: 15px; background: white; color: #001f3f; text-align: center; margin-bottom: 15px; outline: none; }
+        .modal .admin-hint { color: #FFD700; font-size: 0.85rem; margin-top: 10px; font-style: italic; }
+        .modal .error-msg { color: #FF6B6B; font-size: 0.9rem; margin-top: 10px; display: none; background: rgba(255,0,0,0.1); padding: 8px; border-radius: 8px; }
+        footer { background: #001f3f; padding: 30px; text-align: center; border-top: 3px solid #FF69B4; }
+    </style>
+</head>
+<body>
+    <div class="bubbles" id="bubbles"></div>
+    
+    <div class="modal-overlay" id="registerModal">
+        <div class="modal">
+            <h2>Добро пожаловать!</h2>
+            <p>Введи своё имя, чтобы попасть в лидерборд!</p>
+            <input type="text" id="nameInput" placeholder="Твоё имя..." maxlength="15">
+            <div class="error-msg" id="errorMsg">Это имя уже занято! Выбери другое.</div>
+            <button class="btn btn-gold" onclick="saveName()">Начать играть!</button>
+            <p class="admin-hint">Подсказка: введи "патрик" чтобы стать админом</p>
+        </div>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#bio">Кто я?</a></li>
+            <li><a href="#friends">Друзья</a></li>
+            <li><a href="#quotes">Цитаты</a></li>
+            <li><a href="#facts">Факты</a></li>
+            <li><a href="#game">Игра</a></li>
+            <li><a href="#leaderboard">Лидерборд</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <h1>ПАТРИК СТАР</h1>
+        <p>Морская звезда. Философ. Лучший друг. Легенда Бикини Боттом.</p>
+        <button class="btn" onclick="alert('А майонез - это инструмент?')">Ударить по камню!</button>
+    </section>
+
+    <section id="bio">
+        <h2 class="section-title">Кто такой Патрик?</h2>
+        <div class="bio-container">
+            <p><b>Полное имя:</b> Патрик Стар (Patrick Star)</p>
+            <p><b>Место жительства:</b> Камень, Бикини Боттом</p>
+            <p><b>Любимая еда:</b> Крабсбургеры, мороженое</p>
+            <p><b>Хобби:</b> Спать, есть, играть с Губкой Бобом</p>
+        </div>
+    </section>
+
+    <section id="friends">
+        <h2 class="section-title">Мои лучшие друзья</h2>
+        <div class="friends-grid">
+            <div class="friend-card"><h3>Губка Боб</h3><p>Лучший друг на свете!</p></div>
+            <div class="friend-card"><h3>Сквидвард</h3><p>Наш сосед-ворчун.</p></div>
+            <div class="friend-card"><h3>Сэнди</h3><p>Самая умная белка в океане.</p></div>
+            <div class="friend-card"><h3>Мистер Крабс</h3><p>Босс Губки Боба.</p></div>
+        </div>
+    </section>
+
+    <section id="quotes">
+        <h2 class="section-title">Гениальные мысли Патрика</h2>
+        <div class="quote-generator" id="quoteBox">"Внутренние механизмы моего разума - это загадка."</div>
+        <br><br>
+        <button class="btn" onclick="generateQuote()">Ещё одна мудрость!</button>
+    </section>
+
+    <section id="facts">
+        <h2 class="section-title">Секретные факты</h2>
+        <div class="facts-grid">
+            <div class="fact-card"><h3>Цвет</h3><p>Сначала Патрика хотели сделать зелёным, но выбрали розовый.</p></div>
+            <div class="fact-card"><h3>Голос</h3><p>Патрика озвучивает Билл Фагербакки.</p></div>
+            <div class="fact-card"><h3>Семья</h3><p>У Патрика есть родители и сестра Сэм.</p></div>
+            <div class="fact-card"><h3>Достижения</h3><p>Патрик был королём Бикини Боттом!</p></div>
+        </div>
+    </section>
+
+    <section id="game">
+        <h2 class="section-title">Поймай крабсбургеры!</h2>
+        <div class="game-wrapper">
+            <div class="player-info">
+                <div id="playerNameDisplay">Игрок: <b id="currentPlayerName">-</b></div>
+                <button class="btn btn-small" onclick="openNameModal()">Сменить имя</button>
+            </div>
+            <div class="game-info">
+                <span>Счёт: <b id="score">0</b></span>
+                <span>Жизни: <b id="lives">3</b></span>
+            </div>
+            <canvas id="gameCanvas" width="400" height="500"></canvas>
+            <div class="game-controls">
+                <button class="btn" onclick="startGame()">Начать</button>
+                <button class="btn" onclick="resetGame()">Заново</button>
+            </div>
+            <div class="game-hint">
+                <b>Бургер</b> = +1 очко | <b>Мороженое</b> = +3 очка | <b>Медуза</b> = -1 жизнь<br>
+                ⚠️ <b>Если пропустишь еду — тоже -1 жизнь!</b><br>
+                Управление: стрелки ← → или палец
+            </div>
+        </div>
+    </section>
+
+    <section id="leaderboard">
+        <h2 class="section-title">Лидерборд</h2>
+        <div class="leaderboard-wrapper">
+            <div id="leaderboardContent"></div>
+            <div class="leaderboard-actions">
+                <button class="btn btn-gold" onclick="renderLeaderboard()">Обновить</button>
+                <button class="btn btn-admin admin-only" id="clearBtn" onclick="clearLeaderboard()">Очистить</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Кто живет на дне океана? Патрик Стар!</p>
+    </footer>
+
+    <script>
+        const ADMIN_NAME = 'патрик';
+        let currentPlayer = localStorage.getItem('patrickPlayerName') || '';
+        let isAdmin = localStorage.getItem('patrickIsAdmin') === 'true';
+        
+        function openNameModal() { 
+            document.getElementById('registerModal').classList.add('active'); 
+            document.getElementById('nameInput').value = currentPlayer; 
+            document.getElementById('errorMsg').style.display = 'none';
+        }
+        
+        function saveName() { 
+            let name = document.getElementById('nameInput').value.trim(); 
+            if (!name) name = 'Гость'; 
+            name = name.substring(0, 15);
+            
+            const board = getLeaderboard();
+            const nameTaken = board.some(e => e.name.toLowerCase() === name.toLowerCase() && e.name.toLowerCase() !== currentPlayer.toLowerCase());
+            
+            if (nameTaken) {
+                document.getElementById('errorMsg').style.display = 'block';
+                return;
+            }
+            
+            const newIsAdmin = name.toLowerCase() === ADMIN_NAME;
+            if (newIsAdmin && !isAdmin) {
+                if (board.some(e => e.name.toLowerCase() === ADMIN_NAME)) {
+                    alert('Имя "патрик" уже занято!');
+                    return;
+                }
+            }
+            
+            currentPlayer = name; 
+            isAdmin = newIsAdmin; 
+            localStorage.setItem('patrickPlayerName', name); 
+            localStorage.setItem('patrickIsAdmin', isAdmin); 
+            updatePlayerDisplay(); 
+            document.getElementById('registerModal').classList.remove('active'); 
+            renderLeaderboard(); 
+        }
+        
+        function updatePlayerDisplay() { 
+            const el = document.getElementById('playerNameDisplay'); 
+            if (isAdmin) { 
+                el.innerHTML = '<b style="color:#FFD700">' + currentPlayer + '</b> (Админ)'; 
+            } else { 
+                el.innerHTML = 'Игрок: <b>' + currentPlayer + '</b>'; 
+            } 
+            document.getElementById('clearBtn').classList.toggle('visible', isAdmin);
+        }
+        
+        document.getElementById('nameInput').addEventListener('keypress', e => { if (e.key === 'Enter') saveName(); });
+        
+        if (!currentPlayer) setTimeout(openNameModal, 500); 
+        else updatePlayerDisplay();
+        
+        function getLeaderboard() { 
+            const d = localStorage.getItem('patrickLeaderboard'); 
+            return d ? JSON.parse(d) : []; 
+        }
+        
+        function saveToLeaderboard(name, score) { 
+            const board = getLeaderboard(); 
+            const idx = board.findIndex(e => e.name === name); 
+            if (idx !== -1) { 
+                if (score > board[idx].score) board[idx].score = score; 
+            } else { 
+                board.push({ name, score, date: new Date().toLocaleDateString('ru-RU') }); 
+            } 
+            board.sort((a, b) => b.score - a.score); 
+            localStorage.setItem('patrickLeaderboard', JSON.stringify(board.slice(0, 10))); 
+        }
+        
+        function renderLeaderboard() { 
+            const board = getLeaderboard(); 
+            const c = document.getElementById('leaderboardContent'); 
+            if (board.length === 0) { 
+                c.innerHTML = '<div class="empty-leaderboard">Пока никто не играл!</div>'; 
+                return; 
+            } 
+            let html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Игрок</th><th>Счёт</th></tr></thead><tbody>'; 
+            board.forEach((e, i) => { 
+                const rank = i + 1; 
+                let medal = rank; 
+                if (rank === 1) medal = '\u{1F947}'; 
+                else if (rank === 2) medal = '\u{1F948}'; 
+                else if (rank === 3) medal = '\u{1F949}'; 
+                const isMe = e.name === currentPlayer; 
+                const isAdm = e.name.toLowerCase() === ADMIN_NAME; 
+                const cls = isMe ? 'current-player' : (isAdm ? 'admin-row' : ''); 
+                const crown = isAdm ? '\u{1F451} ' : ''; 
+                html += '<tr class="' + cls + '"><td>' + medal + '</td><td>' + crown + e.name + (isMe ? ' (ты)' : '') + '</td><td>' + e.score + '</td></tr>'; 
+            }); 
+            html += '</tbody></table>'; 
+            c.innerHTML = html; 
+        }
+        
+        function clearLeaderboard() { 
+            if (!isAdmin) { alert('Только админ!'); return; } 
+            if (confirm('Очистить весь лидерборд?')) { 
+                localStorage.removeItem('patrickLeaderboard'); 
+                renderLeaderboard(); 
+            } 
+        }
+        
+        renderLeaderboard();
+        
+        const bc = document.getElementById('bubbles');
+        for (let i = 0; i < 20; i++) { 
+            const b = document.createElement('div'); 
+            b.className = 'bubble'; 
+            const s = Math.random() * 50 + 15; 
+            b.style.width = s + 'px'; 
+            b.style.height = s + 'px'; 
+            b.style.left = Math.random() * 100 + '%'; 
+            b.style.animationDuration = (Math.random() * 8 + 5) + 's'; 
+            bc.appendChild(b); 
+        }
+        
+        const quotes = [
+            "А майонез - это инструмент?",
+            "Нет, это Патрик!",
+            "Внутренние механизмы моего разума - это загадка.",
+            "Я вумбо, ты вумбо, мы вумбо.",
+            "Спать - это моё второе имя. А первое - Патрик.",
+            "Это не дверь! Это большая стена с окошком!",
+            "Я могу делать всё. Например, ничего.",
+            "Если ты чего-то не знаешь - это не значит, что этого нет."
+        ];
+        
+        function generateQuote() { 
+            const q = document.getElementById('quoteBox'); 
+            q.style.opacity = 0; 
+            setTimeout(() => { 
+                q.textContent = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"'; 
+                q.style.opacity = 1; 
+            }, 300); 
+        }
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const livesEl = document.getElementById('lives');
+
+        const svgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" width="100" height="110">' +
+            '<defs><radialGradient id="bg" cx="50%" cy="40%" r="60%">' +
+            '<stop offset="0%" style="stop-color:#FFB6C1"/>' +
+            '<stop offset="100%" style="stop-color:#FF69B4"/>' +
+            '</radialGradient>' +
+            '<linearGradient id="sg" x1="0%" y1="0%" x2="0%" y2="100%">' +
+            '<stop offset="0%" style="stop-color:#C8F04A"/>' +
+            '<stop offset="100%" style="stop-color:#9ACD32"/>' +
+            '</linearGradient></defs>' +
+            '<ellipse cx="50" cy="105" rx="35" ry="5" fill="rgba(0,0,0,0.3)"/>' +
+            '<ellipse cx="50" cy="65" rx="38" ry="35" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
+            '<path d="M 20 50 Q 25 10 50 5 Q 75 10 80 50 Z" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
+            '<ellipse cx="12" cy="65" rx="8" ry="15" fill="url(#bg)" stroke="#C71585" stroke-width="1.5" transform="rotate(15 12 65)"/>' +
+            '<ellipse cx="88" cy="65" rx="8" ry="15" fill="url(#bg)" stroke="#C71585" stroke-width="1.5" transform="rotate(-15 88 65)"/>' +
+            '<ellipse cx="35" cy="98" rx="8" ry="6" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
+            '<ellipse cx="65" cy="98" rx="8" ry="6" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
+            '<circle cx="30" cy="55" r="2" fill="#E8587A"/>' +
+            '<circle cx="70" cy="60" r="2" fill="#E8587A"/>' +
+            '<line x1="32" y1="38" x2="42" y2="36" stroke="#8B0000" stroke-width="2" stroke-linecap="round"/>' +
+            '<line x1="58" y1="36" x2="68" y2="38" stroke="#8B0000" stroke-width="2" stroke-linecap="round"/>' +
+            '<ellipse cx="40" cy="45" rx="7" ry="6" fill="white" stroke="#333" stroke-width="1"/>' +
+            '<ellipse cx="60" cy="45" rx="7" ry="6" fill="white" stroke="#333" stroke-width="1"/>' +
+            '<circle cx="40" cy="45" r="2.5" fill="black"/>' +
+            '<circle cx="60" cy="45" r="2.5" fill="black"/>' +
+            '<circle cx="41" cy="43" r="1" fill="white"/>' +
+            '<circle cx="61" cy="43" r="1" fill="white"/>' +
+            '<circle cx="50" cy="52" r="2.5" fill="#FF4081"/>' +
+            '<path d="M 38 60 Q 50 68 62 60" stroke="#8B0000" stroke-width="2" fill="none" stroke-linecap="round"/>' +
+            '<path d="M 20 85 L 80 85 L 78 100 L 55 100 L 50 93 L 45 100 L 22 100 Z" fill="url(#sg)" stroke="#7CB342" stroke-width="1.5"/>' +
+            '<circle cx="30" cy="90" r="3" fill="#9C27B0"/>' +
+            '<circle cx="70" cy="90" r="3" fill="#9C27B0"/>' +
+            '<circle cx="40" cy="95" r="2.5" fill="#9C27B0"/>' +
+            '<circle cx="60" cy="95" r="2.5" fill="#9C27B0"/>' +
+            '<circle cx="50" cy="88" r="2.5" fill="#9C27B0"/>' +
+            '</svg>';
+
+        const patrickImg = new Image();
+        const blob = new Blob([svgCode], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        patrickImg.src = url;
+        
+        let patrickReady = false;
+        patrickImg.onload = () => { patrickReady = true; };
+
+        let gameRunning = false, score = 0, lives = 3;
+        let items = [], effects = [], particles = [];
+        let patrick = { x: 150, y: 380, width: 100, height: 110 };
+        let animId, spawnTimer = 0, difficulty = 1, scoreSaved = false;
+
+        function drawBackground() {
+            const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            g.addColorStop(0, '#4FC3F7');
+            g.addColorStop(0.7, '#0288D1');
+            g.addColorStop(1, '#F4A460');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+            const t = Date.now() / 500;
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, 50 + i * 30);
+                for (let x = 0; x <= canvas.width; x += 10) {
+                    ctx.lineTo(x, 50 + i * 30 + Math.sin(x / 40 + t + i) * 8);
+                }
+                ctx.lineTo(canvas.width, 0);
+                ctx.lineTo(0, 0);
+                ctx.fill();
+            }
+            
+            ctx.fillStyle = '#F4A460';
+            ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+            ctx.fillStyle = '#8B4513';
+            for (let i = 0; i < 8; i++) {
+                ctx.beginPath();
+                ctx.arc(30 + i * 50, canvas.height - 20, 5 + (i % 3), 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            ctx.fillStyle = '#2E7D32';
+            for (let i = 0; i < 5; i++) {
+                const x = 50 + i * 80;
+                const sway = Math.sin(t + i) * 5;
+                ctx.beginPath();
+                ctx.moveTo(x, canvas.height - 40);
+                ctx.quadraticCurveTo(x + sway, canvas.height - 80, x + sway * 2, canvas.height - 110);
+                ctx.quadraticCurveTo(x + sway, canvas.height - 80, x + 8, canvas.height - 40);
+                ctx.fill();
+            }
+        }
+
+        function drawPatrick() {
+            if (patrickReady) {
+                ctx.drawImage(patrickImg, patrick.x, patrick.y, patrick.width, patrick.height);
+            } else {
+                ctx.fillStyle = '#FF8FA8';
+                ctx.fillRect(patrick.x, patrick.y, patrick.width, patrick.height);
+                ctx.fillStyle = 'black';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Патрик', patrick.x + 50, patrick.y + 55);
+            }
+        }
+
+        function drawItem(item) {
+            const cx = item.x + item.size / 2;
+            const cy = item.y + item.size / 2;
+            const r = item.size / 2 + 4;
+            
+            const aura = item.type === 'jellyfish' ? 'rgba(255,50,50,0.4)' : 
+                         item.type === 'icecream' ? 'rgba(255,215,0,0.5)' : 'rgba(100,255,100,0.4)';
+            ctx.fillStyle = aura;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r + 8, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = 'rgba(255,255,255,0.95)';
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.strokeStyle = item.type === 'jellyfish' ? '#FF1744' : 
+                              item.type === 'icecream' ? '#FFD700' : '#4CAF50';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            ctx.font = item.size + 'px serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(item.emoji, cx, cy);
+        }
+
+        function spawnItem() {
+            const rand = Math.random();
+            let emoji, type, points, speed;
+            
+            if (rand < 0.60) { 
+                emoji = '\u{1F354}';
+                type = 'burger'; 
+                points = 1; 
+                speed = 2 + Math.random() * 2 + difficulty * 0.3;
+            } else if (rand < 0.85) { 
+                emoji = '\u{1F366}';
+                type = 'icecream'; 
+                points = 3; 
+                speed = 3 + Math.random() * 2 + difficulty * 0.4;
+            } else { 
+                emoji = '\u{1FABE}';
+                type = 'jellyfish'; 
+                points = -1; 
+                speed = 1.5 + Math.random() * 1.5 + difficulty * 0.2;
+            }
+            
+            const size = 50;
+            const x = Math.random() * (canvas.width - size);
+            items.push({ x, y: -size, size, emoji, type, points, speed, wobble: Math.random() * Math.PI * 2 });
+        }
+
+        function spawnParticles(x, y, color, count) {
+            for (let i = 0; i < count; i++) {
+                const a = (Math.PI * 2 / count) * i;
+                const s = 2 + Math.random() * 3;
+                particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, color, size: 3 + Math.random() * 4 });
+            }
+        }
+
+        function addEffect(x, y, color, text) { 
+            effects.push({ x, y, color, text, life: 1, vy: -2 }); 
+        }
+
+        function checkCollision(item) {
+            const dx = (item.x + item.size / 2) - (patrick.x + patrick.width / 2);
+            const dy = (item.y + item.size / 2) - (patrick.y + patrick.height / 2);
+            return Math.sqrt(dx * dx + dy * dy) < (patrick.width / 2 + item.size / 2 - 10);
+        }
+
+        function gameLoop() {
+            if (!gameRunning) return;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBackground();
+            
+            spawnTimer++;
+            if (spawnTimer > Math.max(50, 90 - difficulty * 4)) { 
+                spawnItem(); 
+                spawnTimer = 0; 
+            }
+            
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                item.y += item.speed;
+                if (item.type === 'jellyfish') { 
+                    item.wobble += 0.05; 
+                    item.x += Math.sin(item.wobble) * 0.5; 
+                }
+                
+                if (checkCollision(item)) {
+                    if (item.type === 'jellyfish') {
+                        lives--; 
+                        livesEl.textContent = lives;
+                        addEffect(item.x + item.size/2, item.y + item.size/2, '#FF0000', '-1');
+                        spawnParticles(item.x + item.size/2, item.y + item.size/2, '#FF1744', 10);
+                        if (lives <= 0) { gameOver(); return; }
+                    } else {
+                        score += item.points; 
+                        scoreEl.textContent = score;
+                        addEffect(item.x + item.size/2, item.y + item.size/2, '#FFD700', '+' + item.points);
+                        spawnParticles(item.x + item.size/2, item.y + item.size/2, '#FFD700', 8);
+                        if (score % 10 === 0) difficulty += 0.5;
+                    }
+                    items.splice(i, 1); 
+                    continue;
+                }
+                
+                if (item.y > canvas.height + 60) {
+                    if (item.type !== 'jellyfish') { 
+                        lives--; 
+                        livesEl.textContent = lives;
+                        addEffect(canvas.width / 2, canvas.height / 2, '#FF6B6B', 'ПРОПУСК! -1');
+                        if (lives <= 0) { gameOver(); return; } 
+                    }
+                    items.splice(i, 1);
+                }
+            }
+            
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx; 
+                p.y += p.vy; 
+                p.vy += 0.1; 
+                p.life -= 0.03;
+                if (p.life <= 0) { particles.splice(i, 1); continue; }
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.beginPath(); 
+                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2); 
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+            
+            for (let i = effects.length - 1; i >= 0; i--) {
+                const e = effects[i];
+                e.y += e.vy; 
+                e.life -= 0.02;
+                if (e.life <= 0) { effects.splice(i, 1); continue; }
+                ctx.globalAlpha = e.life;
+                ctx.fillStyle = e.color;
+                ctx.font = 'bold 24px Arial';
+                ctx.textAlign = 'center';
+                ctx.strokeStyle = 'black'; 
+                ctx.lineWidth = 3;
+                ctx.strokeText(e.text, e.x, e.y);
+                ctx.fillText(e.text, e.x, e.y);
+                ctx.globalAlpha = 1;
+            }
+            
+            items.forEach(drawItem);
+            drawPatrick();
+            animId = requestAnimationFrame(gameLoop);
+        }
+
+        function gameOver() {
+            gameRunning = false; 
+            cancelAnimationFrame(animId);
+            if (!scoreSaved && score > 0 && currentPlayer) { 
+                saveToLeaderboard(currentPlayer, score); 
+                scoreSaved = true; 
+                renderLeaderboard(); 
+            }
+            ctx.fillStyle = 'rgba(0,0,0,0.75)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FFD700'; 
+            ctx.font = 'bold 32px Arial'; 
+            ctx.textAlign = 'center';
+            ctx.fillText('ИГРА ОКОНЧЕНА', canvas.width / 2, canvas.height / 2 - 30);
+            ctx.fillStyle = 'white'; 
+            ctx.font = '22px Arial';
+            ctx.fillText(currentPlayer + ', счёт: ' + score, canvas.width / 2, canvas.height / 2 + 10);
+            ctx.fillStyle = '#FF69B4'; 
+            ctx.font = '18px Arial';
+            ctx.fillText('Нажми "Заново"', canvas.width / 2, canvas.height / 2 + 50);
+        }
+
+        function startGame() { 
+            if (gameRunning) return; 
+            if (!currentPlayer) { openNameModal(); return; } 
+            gameRunning = true; 
+            scoreSaved = false; 
+            spawnTimer = 0; 
+            gameLoop(); 
+        }
+        
+        function resetGame() {
+            gameRunning = false; 
+            cancelAnimationFrame(animId);
+            score = 0; 
+            lives = 3; 
+            items = []; 
+            effects = []; 
+            particles = []; 
+            difficulty = 1; 
+            scoreSaved = false;
+            scoreEl.textContent = score; 
+            livesEl.textContent = lives;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+            drawBackground(); 
+            drawPatrick();
+            ctx.fillStyle = 'rgba(0,0,0,0.6)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#FF69B4'; 
+            ctx.font = 'bold 28px Arial'; 
+            ctx.textAlign = 'center';
+            ctx.fillText('Нажми "Начать"!', canvas.width / 2, canvas.height / 2);
+        }
+
+        const keys = {};
+        document.addEventListener('keydown', e => { keys[e.key] = true; });
+        document.addEventListener('keyup', e => { keys[e.key] = false; });
+        setInterval(() => {
+            if (!gameRunning) return;
+            if (keys['ArrowLeft'] || keys['a']) patrick.x -= 7;
+            if (keys['ArrowRight'] || keys['d']) patrick.x += 7;
+            patrick.x = Math.max(0, Math.min(canvas.width - patrick.width, patrick.x));
+        }, 16);
+
+        canvas.addEventListener('mousemove', e => {
+            if (!gameRunning) return;
+            const r = canvas.getBoundingClientRect();
+            patrick.x = (e.clientX - r.left) * (canvas.width / r.width) - patrick.width / 2;
+            patrick.x = Math.max(0, Math.min(canvas.width - patrick.width, patrick.x));
+        });
+
+        canvas.addEventListener('touchmove', e => {
+            e.preventDefault();
+            if (!gameRunning) return;
+            const r = canvas.getBoundingClientRect();
+            patrick.x = (e.touches[0].clientX - r.left) * (canvas.width / r.width) - patrick.width / 2;
+            patrick.x = Math.max(0, Math.min(canvas.width - patrick.width, patrick.x));
+        }, { passive: false });
+
+        resetGame();
+    </script>
+</body>
+</html>
