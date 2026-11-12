@@ -3,43 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Патрик Стар</title>
+    <title>Патрик Стар | Игры</title>
     <style>
+        /* === ОБЩИЕ СТИЛИ САЙТА === */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { font-family: 'Comic Sans MS', sans-serif; background: linear-gradient(180deg, #0074D9, #001f3f); color: white; overflow-x: hidden; }
+        
         .bubbles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: -1; }
         .bubble { position: absolute; bottom: -100px; background: rgba(255,255,255,0.15); border-radius: 50%; animation: rise 8s infinite ease-in; }
         @keyframes rise { 0% { bottom: -100px; } 100% { bottom: 110%; } }
-        nav { position: fixed; top: 0; width: 100%; background: rgba(0,31,63,0.95); z-index: 1000; padding: 15px 0; }
+        
+        nav { position: fixed; top: 0; width: 100%; background: rgba(0,31,63,0.95); z-index: 1000; padding: 15px 0; backdrop-filter: blur(5px); }
         nav ul { display: flex; justify-content: center; list-style: none; gap: 20px; flex-wrap: wrap; }
-        nav a { color: #FFB6C1; text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+        nav a { color: #FFB6C1; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: color 0.3s; }
         nav a:hover { color: #FF69B4; }
+        
         section { min-height: 100vh; padding: 100px 20px 50px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        
         #home h1 { font-size: 4rem; color: #FF69B4; text-shadow: 4px 4px 0 #001f3f; margin-bottom: 20px; }
         #home p { font-size: 1.3rem; max-width: 600px; margin-bottom: 30px; color: #FFB6C1; }
-        .btn { background: #FF69B4; color: white; padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,105,180,0.4); }
+        
+        .btn { background: #FF69B4; color: white; padding: 15px 30px; border: none; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 5px 15px rgba(255,105,180,0.4); transition: transform 0.2s; margin: 5px; }
         .btn:hover { transform: scale(1.05); }
         .btn-small { padding: 8px 18px; font-size: 0.9rem; }
         .btn-gold { background: linear-gradient(135deg, #FFD700, #FFA500); }
         .btn-admin { background: linear-gradient(135deg, #FF1744, #D50000); }
+        .btn-green { background: linear-gradient(135deg, #00FF88, #00CC66); }
+        .btn-blue { background: linear-gradient(135deg, #00BFFF, #0080FF); }
+        
         .section-title { font-size: 2.5rem; color: #F4A460; margin-bottom: 40px; text-shadow: 2px 2px 0 #001f3f; }
+        
         .bio-container { background: rgba(255,182,193,0.15); border: 3px solid #FF69B4; border-radius: 25px; padding: 30px; max-width: 700px; text-align: left; line-height: 1.8; }
+        
         .friends-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 900px; width: 100%; }
         .friend-card { background: rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; border-top: 5px solid #FF69B4; }
         .friend-card h3 { color: #F4A460; margin-bottom: 10px; }
+        
         .quote-generator { background: #FF69B4; padding: 40px; border-radius: 25px; max-width: 700px; width: 100%; font-size: 1.6rem; font-style: italic; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.3); min-height: 150px; display: flex; align-items: center; justify-content: center; position: relative; transition: opacity 0.3s; }
         .quote-generator::before { content: "\1F4AD"; position: absolute; top: -30px; left: 30px; font-size: 3rem; font-style: normal; }
+        
         .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; max-width: 1000px; width: 100%; }
         .fact-card { background: rgba(255,255,255,0.1); border-left: 5px solid #F4A460; padding: 25px; border-radius: 15px; text-align: left; }
         .fact-card h3 { color: #FF69B4; margin-bottom: 10px; }
-        .game-wrapper { background: rgba(0,31,63,0.6); border: 3px solid #FF69B4; border-radius: 25px; padding: 20px; max-width: 450px; width: 100%; }
-        .player-info { background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .game-info { display: flex; justify-content: space-around; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold; }
-        .game-info span { background: #FF69B4; padding: 8px 20px; border-radius: 20px; }
-        #gameCanvas { width: 100%; height: auto; border-radius: 15px; display: block; touch-action: none; border: 3px solid #F4A460; background: #0288D1; }
-        .game-controls { margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .game-hint { margin-top: 15px; font-size: 0.95rem; color: #FFB6C1; line-height: 1.6; }
-        .leaderboard-wrapper { background: rgba(0,31,63,0.7); border: 3px solid #FFD700; border-radius: 25px; padding: 30px; max-width: 600px; width: 100%; }
+        
+        .leaderboard-wrapper { background: rgba(0,31,63,0.7); border: 3px solid #FFD700; border-radius: 25px; padding: 30px; max-width: 600px; width: 100%; margin-top: 20px;}
         .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 20px; }
         .leaderboard-table th { background: #FFD700; color: #001f3f; padding: 12px; font-size: 1rem; text-align: left; }
         .leaderboard-table th:first-child { border-radius: 10px 0 0 10px; text-align: center; width: 60px; }
@@ -48,11 +55,10 @@
         .leaderboard-table td:first-child { border-radius: 10px 0 0 10px; text-align: center; font-weight: bold; font-size: 1.2rem; }
         .leaderboard-table td:last-child { border-radius: 0 10px 10px 0; text-align: right; font-weight: bold; color: #FFD700; }
         .leaderboard-table tr.current-player td { background: rgba(255,105,180,0.3); }
-        .leaderboard-table tr.admin-row td { background: rgba(255,215,0,0.15); }
         .empty-leaderboard { text-align: center; padding: 40px 20px; font-size: 1.1rem; color: #FFB6C1; }
-        .leaderboard-actions { margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        .admin-only { display: none; }
-        .admin-only.visible { display: inline-block; }
+        
+        footer { background: #001f3f; padding: 30px; text-align: center; border-top: 3px solid #FF69B4; width: 100%; }
+        
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal { background: linear-gradient(135deg, #0074D9, #001f3f); border: 3px solid #FF69B4; border-radius: 25px; padding: 40px; max-width: 400px; width: 100%; text-align: center; }
@@ -61,7 +67,60 @@
         .modal input { width: 100%; padding: 15px; font-size: 1.1rem; border: 2px solid #FF69B4; border-radius: 15px; background: white; color: #001f3f; text-align: center; margin-bottom: 15px; outline: none; }
         .modal .admin-hint { color: #FFD700; font-size: 0.85rem; margin-top: 10px; font-style: italic; }
         .modal .error-msg { color: #FF6B6B; font-size: 0.9rem; margin-top: 10px; display: none; background: rgba(255,0,0,0.1); padding: 8px; border-radius: 8px; }
-        footer { background: #001f3f; padding: 30px; text-align: center; border-top: 3px solid #FF69B4; }
+
+        /* === СТИЛИ ИГР === */
+        .game-section-bg { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+        .game-container { max-width: 900px; margin: 0 auto; width: 100%; }
+        .daily-badge { display: inline-block; background: linear-gradient(135deg, #FF69B4, #FF1493); padding: 8px 15px; border-radius: 50px; margin-top: 10px; font-weight: bold; }
+        
+        .game-screen-box { background: rgba(0,0,0,0.5); border-radius: 20px; padding: 20px; margin-bottom: 20px; }
+        .game-canvas { width: 100%; max-width: 600px; height: auto; border-radius: 15px; display: block; margin: 0 auto; background: #0a0a0a; border: 3px solid #FFD700; touch-action: none; }
+        
+        .hud { display: flex; justify-content: space-around; margin: 15px 0; flex-wrap: wrap; gap: 10px; }
+        .hud-item { background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 15px; text-align: center; min-width: 80px; }
+        .hud-item label { font-size: 0.75rem; color: #FFB6C1; }
+        .hud-item .value { font-size: 1.2rem; font-weight: bold; color: #FFD700; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 20px 0; }
+        .stat-card { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; text-align: center; }
+        .stat-card h3 { font-size: 0.8rem; color: #FFB6C1; margin-bottom: 5px; }
+        .stat-card .value { font-size: 1.3rem; font-weight: bold; color: #FFD700; }
+        
+        .meta-upgrades { display: grid; gap: 15px; margin: 20px 0; }
+        .meta-upgrade { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .meta-upgrade-info { flex: 1; min-width: 200px; text-align: left; }
+        .meta-upgrade-info h3 { color: #FFD700; margin-bottom: 5px; font-size: 1rem; }
+        .meta-upgrade-info p { color: #FFB6C1; font-size: 0.85rem; }
+        
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab { flex: 1; min-width: 100px; padding: 10px; background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); border-radius: 15px; cursor: pointer; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        .tab.active { background: rgba(255,105,180,0.3); border-color: #FF69B4; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .quest-item { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-bottom: 10px; border-left: 5px solid #FF69B4; text-align: left; }
+        .quest-item.completed { border-left-color: #00FF00; opacity: 0.7; }
+        .quest-item h3 { color: #FFD700; margin-bottom: 5px; }
+        .quest-progress { background: rgba(0,0,0,0.3); height: 15px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+        .quest-progress-bar { height: 100%; background: linear-gradient(90deg, #FF69B4, #FFD700); }
+        
+        .achievement { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+        .achievement.unlocked { background: rgba(255,215,0,0.2); border: 2px solid #FFD700; }
+        .achievement-icon { font-size: 2rem; }
+        .achievement-info { flex: 1; text-align: left; }
+        .achievement-info h3 { color: #FFD700; margin-bottom: 3px; font-size: 0.95rem; }
+        .achievement-info p { color: #FFB6C1; font-size: 0.8rem; }
+        
+        .hidden { display: none !important; }
+        .wave-info { background: rgba(255,215,0,0.2); border: 2px solid #FFD700; border-radius: 15px; padding: 10px 20px; margin: 10px 0; text-align: center; font-size: 1.1rem; font-weight: bold; color: #FFD700; }
+        
+        .game-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .game-modal.active { display: flex; }
+        .game-modal-content { background: linear-gradient(135deg, #1e3c72, #2a5298); padding: 30px; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; border: 3px solid #FFD700; }
+        .game-modal-content h2 { color: #FFD700; margin-bottom: 15px; }
+        .game-modal-content p { color: white; margin-bottom: 20px; }
+
+        .game-choice-btn { width: 100%; max-width: 400px; margin: 10px auto; display: block; font-size: 1.2rem; padding: 20px; }
     </style>
 </head>
 <body>
@@ -85,7 +144,7 @@
             <li><a href="#friends">Друзья</a></li>
             <li><a href="#quotes">Цитаты</a></li>
             <li><a href="#facts">Факты</a></li>
-            <li><a href="#game">Игра</a></li>
+            <li><a href="#game">🎮 Игры</a></li>
             <li><a href="#leaderboard">Лидерборд</a></li>
         </ul>
     </nav>
@@ -133,26 +192,113 @@
         </div>
     </section>
 
-    <section id="game">
-        <h2 class="section-title">Поймай крабсбургеры!</h2>
-        <div class="game-wrapper">
-            <div class="player-info">
-                <div id="playerNameDisplay">Игрок: <b id="currentPlayerName">-</b></div>
-                <button class="btn btn-small" onclick="openNameModal()">Сменить имя</button>
+    <!-- РАЗДЕЛ С ИГРАМИ -->
+    <section id="game" class="game-section-bg">
+        <div class="game-container">
+            <div class="header" style="background:none; padding:0; margin-bottom:20px;">
+                <h1 style="font-size:2.5rem; margin-bottom:10px; color:#FFD700; text-shadow: 3px 3px 0 #FF69B4;">🎮 ИГРОВАЯ ЗОНА</h1>
             </div>
-            <div class="game-info">
-                <span>Счёт: <b id="score">0</b></span>
-                <span>Жизни: <b id="lives">3</b></span>
+
+            <!-- МЕНЮ ВЫБОРА ИГРЫ -->
+            <div id="gameSelection" class="game-screen-box">
+                <h2 style="color:#FFD700; font-size:1.8rem; margin-bottom:20px; text-align:center;">Выбери игру!</h2>
+                <button class="btn game-choice-btn" onclick="launchGame1()">🍔 Поймай крабсбургеры!<br><span style="font-size:0.9rem; font-weight:normal;">Классическая игра: лови еду и избегай медуз</span></button>
+                <button class="btn btn-green game-choice-btn" onclick="launchGame2()">🌊 Патрик-Апокалипсис<br><span style="font-size:0.9rem; font-weight:normal;">Новая игра: волны врагов, прокачка и боссы</span></button>
             </div>
-            <canvas id="gameCanvas" width="400" height="500"></canvas>
-            <div class="game-controls">
-                <button class="btn" onclick="startGame()">Начать</button>
-                <button class="btn" onclick="resetGame()">Заново</button>
+
+            <!-- ИНТЕРФЕЙС ИГРЫ 1 (ЛОВЛЯ) -->
+            <div id="game1UI" class="game-screen-box hidden">
+                <div class="player-info" style="background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div id="playerNameDisplay1">Игрок: <b>-</b></div>
+                    <button class="btn btn-small" onclick="openNameModal()">Сменить имя</button>
+                </div>
+                <div class="game-info" style="display: flex; justify-content: space-around; margin-bottom: 15px; font-size: 1.2rem; font-weight: bold;">
+                    <span style="background: #FF69B4; padding: 8px 20px; border-radius: 20px;">Счёт: <b id="g1_score">0</b></span>
+                    <span style="background: #FF69B4; padding: 8px 20px; border-radius: 20px;">Жизни: <b id="g1_lives">3</b></span>
+                </div>
+                <canvas id="canvas1" class="game-canvas" width="400" height="500"></canvas>
+                <div class="game-controls" style="margin-top: 15px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" onclick="startGame1()">Начать</button>
+                    <button class="btn" onclick="resetGame1()">Заново</button>
+                    <button class="btn btn-blue" onclick="backToSelection()">🏠 К выбору игр</button>
+                </div>
+                <div class="game-hint" style="margin-top: 15px; font-size: 0.95rem; color: #FFB6C1; line-height: 1.6;">
+                    <b>Бургер</b> = +1 очко | <b>Мороженое</b> = +3 очка | <b>Медуза</b> = -1 жизнь<br>
+                    ⚠️ <b>Если пропустишь еду — тоже -1 жизнь!</b><br>
+                    Управление: стрелки ← → или палец
+                </div>
             </div>
-            <div class="game-hint">
-                <b>Бургер</b> = +1 очко | <b>Мороженое</b> = +3 очка | <b>Медуза</b> = -1 жизнь<br>
-                ⚠️ <b>Если пропустишь еду — тоже -1 жизнь!</b><br>
-                Управление: стрелки ← → или палец
+
+            <!-- ИНТЕРФЕЙС ИГРЫ 2 (ВОЛНЫ) -->
+            <div id="game2UI" class="hidden">
+                <div id="menuScreen2" class="game-screen-box">
+                    <h2 style="color:#FFD700; font-size:1.8rem; margin-bottom:20px; text-align:center;">🎮 Патрик-Апокалипсис</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>💎 Кристаллы</h3>
+                            <div class="value" id="crystals">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>🏆 Рекорд</h3>
+                            <div class="value" id="bestWave">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>🔫 Оружие</h3>
+                            <div class="value" id="weaponLevel">1</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>🎯 Побед</h3>
+                            <div class="value" id="wins">0</div>
+                        </div>
+                    </div>
+                    <div class="controls" style="display:flex; gap:10px; justify-content:center; margin:15px 0; flex-wrap:wrap;">
+                        <button class="btn btn-green" onclick="startGame2()">▶️ Начать забег</button>
+                        <button class="btn btn-blue" onclick="backToSelection()">🏠 К выбору игр</button>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTab('meta', this)">⬆️ Прокачка</div>
+                        <div class="tab" onclick="switchTab('quests', this)">📋 Квесты</div>
+                        <div class="tab" onclick="switchTab('achievements', this)">🏆 Достижения</div>
+                    </div>
+                    <div id="meta" class="tab-content active">
+                        <div class="meta-upgrades" id="metaUpgrades"></div>
+                    </div>
+                    <div id="quests" class="tab-content">
+                        <div id="questList"></div>
+                    </div>
+                    <div id="achievements" class="tab-content">
+                        <div id="achievementList"></div>
+                    </div>
+                </div>
+
+                <div id="gameScreen2" class="game-screen-box hidden">
+                    <div class="hud">
+                        <div class="hud-item"><label>❤️ HP</label><div class="value" id="health">100</div></div>
+                        <div class="hud-item"><label>🌊 Волна</label><div class="value" id="wave">1</div></div>
+                        <div class="hud-item"><label>🔫 Оружие</label><div class="value" id="weaponLevelDisplay">1</div></div>
+                        <div class="hud-item"><label>💀 Убийства</label><div class="value" id="kills">0</div></div>
+                    </div>
+                    <div class="wave-info" id="waveInfo">Волна 1: 10 Патриков</div>
+                    <canvas id="canvas2" class="game-canvas" width="600" height="600"></canvas>
+                    <div class="controls" style="display:flex; gap:10px; justify-content:center; margin:15px 0; flex-wrap:wrap;">
+                        <button class="btn" onclick="pauseGame2()">⏸️ Пауза</button>
+                        <button class="btn btn-gold" onclick="backToMenu2()">🏠 Меню игры</button>
+                    </div>
+                </div>
+
+                <div id="gameOverScreen2" class="game-screen-box hidden">
+                    <h2 id="gameOverTitle" style="color:#FFD700; font-size:1.8rem; margin-bottom:20px; text-align:center;">💀 Игра окончена!</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3>🌊 Волна</h3><div class="value" id="finalWave">1</div></div>
+                        <div class="stat-card"><h3>💀 Убийства</h3><div class="value" id="finalKills">0</div></div>
+                        <div class="stat-card"><h3>⭐ Очки</h3><div class="value" id="finalScore">0</div></div>
+                        <div class="stat-card"><h3>💎 Кристаллы</h3><div class="value" id="finalCrystals">0</div></div>
+                    </div>
+                    <div class="controls" style="display:flex; gap:10px; justify-content:center; margin:15px 0; flex-wrap:wrap;">
+                        <button class="btn btn-green" onclick="startGame2()">🔄 Ещё раз</button>
+                        <button class="btn" onclick="backToMenu2()">🏠 Меню игры</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -161,7 +307,7 @@
         <h2 class="section-title">Лидерборд</h2>
         <div class="leaderboard-wrapper">
             <div id="leaderboardContent"></div>
-            <div class="leaderboard-actions">
+            <div class="leaderboard-actions" style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
                 <button class="btn btn-gold" onclick="renderLeaderboard()">Обновить</button>
                 <button class="btn btn-admin admin-only" id="clearBtn" onclick="clearLeaderboard()">Очистить</button>
             </div>
@@ -172,7 +318,18 @@
         <p>Кто живет на дне океана? Патрик Стар!</p>
     </footer>
 
+    <div class="game-modal" id="gameModal">
+        <div class="game-modal-content">
+            <h2 id="modalTitle">Заголовок</h2>
+            <p id="modalText">Текст</p>
+            <button class="btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
     <script>
+        // ==========================================
+        // ОБЩАЯ ЛОГИКА САЙТА И ЛИДЕРБОРДА
+        // ==========================================
         const ADMIN_NAME = 'патрик';
         let currentPlayer = localStorage.getItem('patrickPlayerName') || '';
         let isAdmin = localStorage.getItem('patrickIsAdmin') === 'true';
@@ -187,46 +344,36 @@
             let name = document.getElementById('nameInput').value.trim(); 
             if (!name) name = 'Гость'; 
             name = name.substring(0, 15);
-            
             const board = getLeaderboard();
             const nameTaken = board.some(e => e.name.toLowerCase() === name.toLowerCase() && e.name.toLowerCase() !== currentPlayer.toLowerCase());
-            
-            if (nameTaken) {
-                document.getElementById('errorMsg').style.display = 'block';
-                return;
-            }
-            
+            if (nameTaken) { document.getElementById('errorMsg').style.display = 'block'; return; }
             const newIsAdmin = name.toLowerCase() === ADMIN_NAME;
             if (newIsAdmin && !isAdmin) {
-                if (board.some(e => e.name.toLowerCase() === ADMIN_NAME)) {
-                    alert('Имя "патрик" уже занято!');
-                    return;
-                }
+                if (board.some(e => e.name.toLowerCase() === ADMIN_NAME)) { alert('Имя "патрик" уже занято!'); return; }
             }
-            
             currentPlayer = name; 
             isAdmin = newIsAdmin; 
             localStorage.setItem('patrickPlayerName', name); 
             localStorage.setItem('patrickIsAdmin', isAdmin); 
-            updatePlayerDisplay(); 
+            updatePlayerDisplays(); 
             document.getElementById('registerModal').classList.remove('active'); 
             renderLeaderboard(); 
         }
         
-        function updatePlayerDisplay() { 
-            const el = document.getElementById('playerNameDisplay'); 
-            if (isAdmin) { 
-                el.innerHTML = '<b style="color:#FFD700">' + currentPlayer + '</b> (Админ)'; 
-            } else { 
-                el.innerHTML = 'Игрок: <b>' + currentPlayer + '</b>'; 
-            } 
-            document.getElementById('clearBtn').classList.toggle('visible', isAdmin);
+        function updatePlayerDisplays() { 
+            const el1 = document.getElementById('playerNameDisplay1');
+            if (el1) {
+                el1.innerHTML = isAdmin ? '<b style="color:#FFD700">' + currentPlayer + '</b> (Админ)' : 'Игрок: <b>' + currentPlayer + '</b>';
+            }
+            const clearBtn = document.getElementById('clearBtn');
+            if (clearBtn) clearBtn.classList.toggle('visible', isAdmin);
         }
         
-        document.getElementById('nameInput').addEventListener('keypress', e => { if (e.key === 'Enter') saveName(); });
-        
+        if (document.getElementById('nameInput')) {
+            document.getElementById('nameInput').addEventListener('keypress', e => { if (e.key === 'Enter') saveName(); });
+        }
         if (!currentPlayer) setTimeout(openNameModal, 500); 
-        else updatePlayerDisplay();
+        else updatePlayerDisplays();
         
         function getLeaderboard() { 
             const d = localStorage.getItem('patrickLeaderboard'); 
@@ -236,11 +383,8 @@
         function saveToLeaderboard(name, score) { 
             const board = getLeaderboard(); 
             const idx = board.findIndex(e => e.name === name); 
-            if (idx !== -1) { 
-                if (score > board[idx].score) board[idx].score = score; 
-            } else { 
-                board.push({ name, score, date: new Date().toLocaleDateString('ru-RU') }); 
-            } 
+            if (idx !== -1) { if (score > board[idx].score) board[idx].score = score; } 
+            else { board.push({ name, score, date: new Date().toLocaleDateString('ru-RU') }); } 
             board.sort((a, b) => b.score - a.score); 
             localStorage.setItem('patrickLeaderboard', JSON.stringify(board.slice(0, 10))); 
         }
@@ -248,17 +392,11 @@
         function renderLeaderboard() { 
             const board = getLeaderboard(); 
             const c = document.getElementById('leaderboardContent'); 
-            if (board.length === 0) { 
-                c.innerHTML = '<div class="empty-leaderboard">Пока никто не играл!</div>'; 
-                return; 
-            } 
-            let html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Игрок</th><th>Счёт</th></tr></thead><tbody>'; 
+            if (board.length === 0) { c.innerHTML = '<div class="empty-leaderboard">Пока никто не играл!</div>'; return; } 
+            let html = '<table class="leaderboard-table"><thead><tr><th>#</th><th>Игрок</th><th>Рекорд</th></tr></thead><tbody>'; 
             board.forEach((e, i) => { 
                 const rank = i + 1; 
-                let medal = rank; 
-                if (rank === 1) medal = '\u{1F947}'; 
-                else if (rank === 2) medal = '\u{1F948}'; 
-                else if (rank === 3) medal = '\u{1F949}'; 
+                let medal = rank === 1 ? '\u{1F947}' : rank === 2 ? '\u{1F948}' : rank === 3 ? '\u{1F949}' : rank; 
                 const isMe = e.name === currentPlayer; 
                 const isAdm = e.name.toLowerCase() === ADMIN_NAME; 
                 const cls = isMe ? 'current-player' : (isAdm ? 'admin-row' : ''); 
@@ -271,60 +409,69 @@
         
         function clearLeaderboard() { 
             if (!isAdmin) { alert('Только админ!'); return; } 
-            if (confirm('Очистить весь лидерборд?')) { 
-                localStorage.removeItem('patrickLeaderboard'); 
-                renderLeaderboard(); 
-            } 
+            if (confirm('Очистить весь лидерборд?')) { localStorage.removeItem('patrickLeaderboard'); renderLeaderboard(); } 
         }
-        
         renderLeaderboard();
         
         const bc = document.getElementById('bubbles');
         for (let i = 0; i < 20; i++) { 
-            const b = document.createElement('div'); 
-            b.className = 'bubble'; 
-            const s = Math.random() * 50 + 15; 
-            b.style.width = s + 'px'; 
-            b.style.height = s + 'px'; 
-            b.style.left = Math.random() * 100 + '%'; 
-            b.style.animationDuration = (Math.random() * 8 + 5) + 's'; 
+            const b = document.createElement('div'); b.className = 'bubble'; 
+            const s = Math.random() * 50 + 15; b.style.width = s + 'px'; b.style.height = s + 'px'; 
+            b.style.left = Math.random() * 100 + '%'; b.style.animationDuration = (Math.random() * 8 + 5) + 's'; 
             bc.appendChild(b); 
         }
         
-        const quotes = [
-            "А майонез - это инструмент?",
-            "Нет, это Патрик!",
-            "Внутренние механизмы моего разума - это загадка.",
-            "Я вумбо, ты вумбо, мы вумбо.",
-            "Спать - это моё второе имя. А первое - Патрик.",
-            "Это не дверь! Это большая стена с окошком!",
-            "Я могу делать всё. Например, ничего.",
-            "Если ты чего-то не знаешь - это не значит, что этого нет."
-        ];
-        
+        const quotes = ["А майонез - это инструмент?", "Нет, это Патрик!", "Внутренние механизмы моего разума - это загадка.", "Я вумбо, ты вумбо, мы вумбо.", "Спать - это моё второе имя. А первое - Патрик.", "Это не дверь! Это большая стена с окошком!", "Я могу делать всё. Например, ничего.", "Если ты чего-то не знаешь - это не значит, что этого нет."];
         function generateQuote() { 
-            const q = document.getElementById('quoteBox'); 
-            q.style.opacity = 0; 
-            setTimeout(() => { 
-                q.textContent = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"'; 
-                q.style.opacity = 1; 
-            }, 300); 
+            const q = document.getElementById('quoteBox'); q.style.opacity = 0; 
+            setTimeout(() => { q.textContent = '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"'; q.style.opacity = 1; }, 300); 
         }
 
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreEl = document.getElementById('score');
-        const livesEl = document.getElementById('lives');
+        // ==========================================
+        // УПРАВЛЕНИЕ ВЫБОРОМ ИГР
+        // ==========================================
+        function stopAllGames() {
+            if (g1_animId) cancelAnimationFrame(g1_animId);
+            if (g2_animId) cancelAnimationFrame(g2_animId);
+            g1_gameRunning = false;
+            g2_gameRunning = false;
+        }
 
-        const svgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" width="100" height="110">' +
-            '<defs><radialGradient id="bg" cx="50%" cy="40%" r="60%">' +
-            '<stop offset="0%" style="stop-color:#FFB6C1"/>' +
-            '<stop offset="100%" style="stop-color:#FF69B4"/>' +
-            '</radialGradient>' +
-            '<linearGradient id="sg" x1="0%" y1="0%" x2="0%" y2="100%">' +
-            '<stop offset="0%" style="stop-color:#C8F04A"/>' +
-            '<stop offset="100%" style="stop-color:#9ACD32"/>' +
-            '</linearGradient></defs>' +
+        function backToSelection() {
+            stopAllGames();
+            document.getElementById('gameSelection').classList.remove('hidden');
+            document.getElementById('game1UI').classList.add('hidden');
+            document.getElementById('game2UI').classList.add('hidden');
+        }
+
+        function launchGame1() {
+            stopAllGames();
+            document.getElementById('gameSelection').classList.add('hidden');
+            document.getElementById('game1UI').classList.remove('hidden');
+            updatePlayerDisplays();
+            resetGame1();
+        }
+
+        function launchGame2() {
+            stopAllGames();
+            document.getElementById('gameSelection').classList.add('hidden');
+            document.getElementById('game2UI').classList.remove('hidden');
+            backToMenu2();
+        }
+
+        // ==========================================
+        // ИГРА 1: ПОЙМАЙ КРАБСБУРГЕРЫ
+        // ==========================================
+        let g1_gameRunning = false, g1_score = 0, g1_lives = 3;
+        let g1_items = [], g1_effects = [], g1_particles = [];
+        let g1_patrick = { x: 150, y: 380, width: 100, height: 110 };
+        let g1_animId, g1_spawnTimer = 0, g1_difficulty = 1, g1_scoreSaved = false;
+        const g1_canvas = document.getElementById('canvas1');
+        const g1_ctx = g1_canvas.getContext('2d');
+
+        const g1_svgCode = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110" width="100" height="110">' +
+            '<defs><radialGradient id="bg" cx="50%" cy="40%" r="60%"><stop offset="0%" style="stop-color:#FFB6C1"/><stop offset="100%" style="stop-color:#FF69B4"/></radialGradient>' +
+            '<linearGradient id="sg" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" style="stop-color:#C8F04A"/><stop offset="100%" style="stop-color:#9ACD32"/></linearGradient></defs>' +
             '<ellipse cx="50" cy="105" rx="35" ry="5" fill="rgba(0,0,0,0.3)"/>' +
             '<ellipse cx="50" cy="65" rx="38" ry="35" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
             '<path d="M 20 50 Q 25 10 50 5 Q 75 10 80 50 Z" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
@@ -332,356 +479,587 @@
             '<ellipse cx="88" cy="65" rx="8" ry="15" fill="url(#bg)" stroke="#C71585" stroke-width="1.5" transform="rotate(-15 88 65)"/>' +
             '<ellipse cx="35" cy="98" rx="8" ry="6" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
             '<ellipse cx="65" cy="98" rx="8" ry="6" fill="url(#bg)" stroke="#C71585" stroke-width="1.5"/>' +
-            '<circle cx="30" cy="55" r="2" fill="#E8587A"/>' +
-            '<circle cx="70" cy="60" r="2" fill="#E8587A"/>' +
+            '<circle cx="30" cy="55" r="2" fill="#E8587A"/><circle cx="70" cy="60" r="2" fill="#E8587A"/>' +
             '<line x1="32" y1="38" x2="42" y2="36" stroke="#8B0000" stroke-width="2" stroke-linecap="round"/>' +
             '<line x1="58" y1="36" x2="68" y2="38" stroke="#8B0000" stroke-width="2" stroke-linecap="round"/>' +
             '<ellipse cx="40" cy="45" rx="7" ry="6" fill="white" stroke="#333" stroke-width="1"/>' +
             '<ellipse cx="60" cy="45" rx="7" ry="6" fill="white" stroke="#333" stroke-width="1"/>' +
-            '<circle cx="40" cy="45" r="2.5" fill="black"/>' +
-            '<circle cx="60" cy="45" r="2.5" fill="black"/>' +
-            '<circle cx="41" cy="43" r="1" fill="white"/>' +
-            '<circle cx="61" cy="43" r="1" fill="white"/>' +
+            '<circle cx="40" cy="45" r="2.5" fill="black"/><circle cx="60" cy="45" r="2.5" fill="black"/>' +
+            '<circle cx="41" cy="43" r="1" fill="white"/><circle cx="61" cy="43" r="1" fill="white"/>' +
             '<circle cx="50" cy="52" r="2.5" fill="#FF4081"/>' +
             '<path d="M 38 60 Q 50 68 62 60" stroke="#8B0000" stroke-width="2" fill="none" stroke-linecap="round"/>' +
             '<path d="M 20 85 L 80 85 L 78 100 L 55 100 L 50 93 L 45 100 L 22 100 Z" fill="url(#sg)" stroke="#7CB342" stroke-width="1.5"/>' +
-            '<circle cx="30" cy="90" r="3" fill="#9C27B0"/>' +
-            '<circle cx="70" cy="90" r="3" fill="#9C27B0"/>' +
-            '<circle cx="40" cy="95" r="2.5" fill="#9C27B0"/>' +
-            '<circle cx="60" cy="95" r="2.5" fill="#9C27B0"/>' +
-            '<circle cx="50" cy="88" r="2.5" fill="#9C27B0"/>' +
+            '<circle cx="30" cy="90" r="3" fill="#9C27B0"/><circle cx="70" cy="90" r="3" fill="#9C27B0"/>' +
+            '<circle cx="40" cy="95" r="2.5" fill="#9C27B0"/><circle cx="60" cy="95" r="2.5" fill="#9C27B0"/><circle cx="50" cy="88" r="2.5" fill="#9C27B0"/>' +
             '</svg>';
+        const g1_patrickImg = new Image();
+        g1_patrickImg.src = URL.createObjectURL(new Blob([g1_svgCode], {type: 'image/svg+xml'}));
+        let g1_patrickReady = false;
+        g1_patrickImg.onload = () => { g1_patrickReady = true; };
 
-        const patrickImg = new Image();
-        const blob = new Blob([svgCode], {type: 'image/svg+xml'});
-        const url = URL.createObjectURL(blob);
-        patrickImg.src = url;
-        
-        let patrickReady = false;
-        patrickImg.onload = () => { patrickReady = true; };
-
-        let gameRunning = false, score = 0, lives = 3;
-        let items = [], effects = [], particles = [];
-        let patrick = { x: 150, y: 380, width: 100, height: 110 };
-        let animId, spawnTimer = 0, difficulty = 1, scoreSaved = false;
-
-        function drawBackground() {
-            const g = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            g.addColorStop(0, '#4FC3F7');
-            g.addColorStop(0.7, '#0288D1');
-            g.addColorStop(1, '#F4A460');
-            ctx.fillStyle = g;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        function g1_drawBackground() {
+            const g = g1_ctx.createLinearGradient(0, 0, 0, g1_canvas.height);
+            g.addColorStop(0, '#4FC3F7'); g.addColorStop(0.7, '#0288D1'); g.addColorStop(1, '#F4A460');
+            g1_ctx.fillStyle = g; g1_ctx.fillRect(0, 0, g1_canvas.width, g1_canvas.height);
+            g1_ctx.fillStyle = 'rgba(255,255,255,0.3)';
             const t = Date.now() / 500;
             for (let i = 0; i < 3; i++) {
-                ctx.beginPath();
-                ctx.moveTo(0, 50 + i * 30);
-                for (let x = 0; x <= canvas.width; x += 10) {
-                    ctx.lineTo(x, 50 + i * 30 + Math.sin(x / 40 + t + i) * 8);
-                }
-                ctx.lineTo(canvas.width, 0);
-                ctx.lineTo(0, 0);
-                ctx.fill();
+                g1_ctx.beginPath(); g1_ctx.moveTo(0, 50 + i * 30);
+                for (let x = 0; x <= g1_canvas.width; x += 10) g1_ctx.lineTo(x, 50 + i * 30 + Math.sin(x / 40 + t + i) * 8);
+                g1_ctx.lineTo(g1_canvas.width, 0); g1_ctx.lineTo(0, 0); g1_ctx.fill();
             }
-            
-            ctx.fillStyle = '#F4A460';
-            ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
-            ctx.fillStyle = '#8B4513';
-            for (let i = 0; i < 8; i++) {
-                ctx.beginPath();
-                ctx.arc(30 + i * 50, canvas.height - 20, 5 + (i % 3), 0, Math.PI * 2);
-                ctx.fill();
-            }
-            
-            ctx.fillStyle = '#2E7D32';
+            g1_ctx.fillStyle = '#F4A460'; g1_ctx.fillRect(0, g1_canvas.height - 40, g1_canvas.width, 40);
+            g1_ctx.fillStyle = '#8B4513';
+            for (let i = 0; i < 8; i++) { g1_ctx.beginPath(); g1_ctx.arc(30 + i * 50, g1_canvas.height - 20, 5 + (i % 3), 0, Math.PI * 2); g1_ctx.fill(); }
+            g1_ctx.fillStyle = '#2E7D32';
             for (let i = 0; i < 5; i++) {
-                const x = 50 + i * 80;
-                const sway = Math.sin(t + i) * 5;
-                ctx.beginPath();
-                ctx.moveTo(x, canvas.height - 40);
-                ctx.quadraticCurveTo(x + sway, canvas.height - 80, x + sway * 2, canvas.height - 110);
-                ctx.quadraticCurveTo(x + sway, canvas.height - 80, x + 8, canvas.height - 40);
-                ctx.fill();
+                const x = 50 + i * 80, sway = Math.sin(t + i) * 5;
+                g1_ctx.beginPath(); g1_ctx.moveTo(x, g1_canvas.height - 40);
+                g1_ctx.quadraticCurveTo(x + sway, g1_canvas.height - 80, x + sway * 2, g1_canvas.height - 110);
+                g1_ctx.quadraticCurveTo(x + sway, g1_canvas.height - 80, x + 8, g1_canvas.height - 40); g1_ctx.fill();
             }
         }
 
-        function drawPatrick() {
-            if (patrickReady) {
-                ctx.drawImage(patrickImg, patrick.x, patrick.y, patrick.width, patrick.height);
-            } else {
-                ctx.fillStyle = '#FF8FA8';
-                ctx.fillRect(patrick.x, patrick.y, patrick.width, patrick.height);
-                ctx.fillStyle = 'black';
-                ctx.font = '14px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText('Патрик', patrick.x + 50, patrick.y + 55);
-            }
+        function g1_drawPatrick() {
+            if (g1_patrickReady) g1_ctx.drawImage(g1_patrickImg, g1_patrick.x, g1_patrick.y, g1_patrick.width, g1_patrick.height);
+            else { g1_ctx.fillStyle = '#FF8FA8'; g1_ctx.fillRect(g1_patrick.x, g1_patrick.y, g1_patrick.width, g1_patrick.height); }
         }
 
-        function drawItem(item) {
-            const cx = item.x + item.size / 2;
-            const cy = item.y + item.size / 2;
-            const r = item.size / 2 + 4;
-            
-            const aura = item.type === 'jellyfish' ? 'rgba(255,50,50,0.5)' : 
-                         item.type === 'icecream' ? 'rgba(255,215,0,0.5)' : 'rgba(100,255,100,0.4)';
-            ctx.fillStyle = aura;
-            ctx.beginPath();
-            ctx.arc(cx, cy, r + 8, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.fillStyle = 'rgba(255,255,255,0.95)';
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
-            ctx.fill();
-            
-            ctx.strokeStyle = item.type === 'jellyfish' ? '#FF1744' : 
-                              item.type === 'icecream' ? '#FFD700' : '#4CAF50';
-            ctx.lineWidth = 3;
-            ctx.stroke();
-            
-            ctx.font = item.size + 'px serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(item.emoji, cx, cy);
+        function g1_drawItem(item) {
+            const cx = item.x + item.size / 2, cy = item.y + item.size / 2, r = item.size / 2 + 4;
+            const aura = item.type === 'jellyfish' ? 'rgba(255,50,50,0.5)' : item.type === 'icecream' ? 'rgba(255,215,0,0.5)' : 'rgba(100,255,100,0.4)';
+            g1_ctx.fillStyle = aura; g1_ctx.beginPath(); g1_ctx.arc(cx, cy, r + 8, 0, Math.PI * 2); g1_ctx.fill();
+            g1_ctx.fillStyle = 'rgba(255,255,255,0.95)'; g1_ctx.beginPath(); g1_ctx.arc(cx, cy, r, 0, Math.PI * 2); g1_ctx.fill();
+            g1_ctx.strokeStyle = item.type === 'jellyfish' ? '#FF1744' : item.type === 'icecream' ? '#FFD700' : '#4CAF50';
+            g1_ctx.lineWidth = 3; g1_ctx.stroke();
+            g1_ctx.font = item.size + 'px serif'; g1_ctx.textAlign = 'center'; g1_ctx.textBaseline = 'middle';
+            g1_ctx.fillText(item.emoji, cx, cy);
         }
 
-        function spawnItem() {
+        function g1_spawnItem() {
             const rand = Math.random();
             let emoji, type, points, speed;
-            
-            if (rand < 0.55) { 
-                emoji = '\u{1F354}';
-                type = 'burger'; 
-                points = 1; 
-                speed = 3 + Math.random() * 2 + difficulty * 0.4;
-            } else if (rand < 0.80) { 
-                emoji = '\u{1F366}';
-                type = 'icecream'; 
-                points = 3; 
-                speed = 3.5 + Math.random() * 2 + difficulty * 0.4;
-            } else { 
-                emoji = '\u{1FABE}';
-                type = 'jellyfish'; 
-                points = -1; 
-                speed = 2.5 + Math.random() * 2 + difficulty * 0.3;
-            }
-            
+            if (rand < 0.55) { emoji = '\u{1F354}'; type = 'burger'; points = 1; speed = 3 + Math.random() * 2 + g1_difficulty * 0.4; } 
+            else if (rand < 0.80) { emoji = '\u{1F366}'; type = 'icecream'; points = 3; speed = 3.5 + Math.random() * 2 + g1_difficulty * 0.4; } 
+            else { emoji = '\u{1FABE}'; type = 'jellyfish'; points = -1; speed = 2.5 + Math.random() * 2 + g1_difficulty * 0.3; }
             const size = 50;
-            const maxAttempts = 15;
-            let placed = false;
-            let newItem = null;
-            
-            for (let attempt = 0; attempt < maxAttempts; attempt++) {
-                const candidateX = Math.random() * (canvas.width - size);
-                const candidateY = -size - Math.random() * 100;
-                
+            for (let attempt = 0; attempt < 15; attempt++) {
+                const candidateX = Math.random() * (g1_canvas.width - size), candidateY = -size - Math.random() * 100;
                 let tooClose = false;
-                for (const existing of items) {
-                    const dx = (candidateX + size/2) - (existing.x + existing.size/2);
-                    const dy = (candidateY + size/2) - (existing.y + existing.size/2);
-                    const distance = Math.sqrt(dx*dx + dy*dy);
-                    if (distance < 130) { 
-                        tooClose = true; 
-                        break; 
-                    }
+                for (const existing of g1_items) {
+                    if (Math.sqrt(((candidateX + size/2) - (existing.x + existing.size/2))**2 + ((candidateY + size/2) - (existing.y + existing.size/2))**2) < 130) { tooClose = true; break; }
                 }
-                
-                if (!tooClose) {
-                    newItem = { x: candidateX, y: candidateY, size, emoji, type, points, speed, wobble: Math.random() * Math.PI * 2 };
-                    placed = true;
-                    break;
-                }
-            }
-            
-            if (placed) items.push(newItem);
-        }
-
-        function spawnParticles(x, y, color, count) {
-            for (let i = 0; i < count; i++) {
-                const a = (Math.PI * 2 / count) * i;
-                const s = 2 + Math.random() * 3;
-                particles.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: 1, color, size: 3 + Math.random() * 4 });
+                if (!tooClose) { g1_items.push({ x: candidateX, y: candidateY, size, emoji, type, points, speed, wobble: Math.random() * Math.PI * 2 }); return; }
             }
         }
 
-        function addEffect(x, y, color, text) { 
-            effects.push({ x, y, color, text, life: 1, vy: -2 }); 
+        function g1_checkCollision(item) {
+            const dx = (item.x + item.size / 2) - (g1_patrick.x + g1_patrick.width / 2);
+            const dy = (item.y + item.size / 2) - (g1_patrick.y + g1_patrick.height / 2);
+            return Math.sqrt(dx * dx + dy * dy) < (g1_patrick.width / 2 + item.size / 2 - 10);
         }
 
-        function checkCollision(item) {
-            const dx = (item.x + item.size / 2) - (patrick.x + patrick.width / 2);
-            const dy = (item.y + item.size / 2) - (patrick.y + patrick.height / 2);
-            return Math.sqrt(dx * dx + dy * dy) < (patrick.width / 2 + item.size / 2 - 10);
-        }
-
-        function gameLoop() {
-            if (!gameRunning) return;
+        function g1_gameLoop() {
+            if (!g1_gameRunning) return;
+            g1_ctx.clearRect(0, 0, g1_canvas.width, g1_canvas.height);
+            g1_drawBackground();
+            g1_spawnTimer++;
+            if (g1_spawnTimer > Math.max(35, 70 - g1_difficulty * 3)) { g1_spawnItem(); g1_spawnTimer = 0; }
             
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBackground();
-            
-            spawnTimer++;
-            if (spawnTimer > Math.max(35, 70 - difficulty * 3)) { 
-                spawnItem(); 
-                spawnTimer = 0; 
-            }
-            
-            for (let i = items.length - 1; i >= 0; i--) {
-                const item = items[i];
+            for (let i = g1_items.length - 1; i >= 0; i--) {
+                const item = g1_items[i];
                 item.y += item.speed;
-                if (item.type === 'jellyfish') { 
-                    item.wobble += 0.05; 
-                    item.x += Math.sin(item.wobble) * 0.5; 
-                }
-                
-                if (checkCollision(item)) {
+                if (item.type === 'jellyfish') { item.wobble += 0.05; item.x += Math.sin(item.wobble) * 0.5; }
+                if (g1_checkCollision(item)) {
                     if (item.type === 'jellyfish') {
-                        lives--; 
-                        livesEl.textContent = lives;
-                        addEffect(item.x + item.size/2, item.y + item.size/2, '#FF0000', '-1');
-                        spawnParticles(item.x + item.size/2, item.y + item.size/2, '#FF1744', 10);
-                        if (lives <= 0) { gameOver(); return; }
+                        g1_lives--; document.getElementById('g1_lives').textContent = g1_lives;
+                        if (g1_lives <= 0) { g1_gameOver(); return; }
                     } else {
-                        score += item.points; 
-                        scoreEl.textContent = score;
-                        addEffect(item.x + item.size/2, item.y + item.size/2, '#FFD700', '+' + item.points);
-                        spawnParticles(item.x + item.size/2, item.y + item.size/2, '#FFD700', 8);
-                        if (score % 10 === 0) difficulty += 0.5;
+                        g1_score += item.points; document.getElementById('g1_score').textContent = g1_score;
+                        if (g1_score % 10 === 0) g1_difficulty += 0.5;
                     }
-                    items.splice(i, 1); 
-                    continue;
+                    g1_items.splice(i, 1); continue;
                 }
-                
-                if (item.y > canvas.height + 60) {
-                    if (item.type !== 'jellyfish') { 
-                        lives--; 
-                        livesEl.textContent = lives;
-                        addEffect(canvas.width / 2, canvas.height / 2, '#FF6B6B', 'ПРОПУСК! -1');
-                        if (lives <= 0) { gameOver(); return; } 
-                    }
-                    items.splice(i, 1);
+                if (item.y > g1_canvas.height + 60) {
+                    if (item.type !== 'jellyfish') { g1_lives--; document.getElementById('g1_lives').textContent = g1_lives; if (g1_lives <= 0) { g1_gameOver(); return; } }
+                    g1_items.splice(i, 1);
                 }
             }
-            
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const p = particles[i];
-                p.x += p.vx; 
-                p.y += p.vy; 
-                p.vy += 0.1; 
-                p.life -= 0.03;
-                if (p.life <= 0) { particles.splice(i, 1); continue; }
-                ctx.globalAlpha = p.life;
-                ctx.fillStyle = p.color;
-                ctx.beginPath(); 
-                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2); 
-                ctx.fill();
-                ctx.globalAlpha = 1;
-            }
-            
-            for (let i = effects.length - 1; i >= 0; i--) {
-                const e = effects[i];
-                e.y += e.vy; 
-                e.life -= 0.02;
-                if (e.life <= 0) { effects.splice(i, 1); continue; }
-                ctx.globalAlpha = e.life;
-                ctx.fillStyle = e.color;
-                ctx.font = 'bold 24px Arial';
-                ctx.textAlign = 'center';
-                ctx.strokeStyle = 'black'; 
-                ctx.lineWidth = 3;
-                ctx.strokeText(e.text, e.x, e.y);
-                ctx.fillText(e.text, e.x, e.y);
-                ctx.globalAlpha = 1;
-            }
-            
-            items.forEach(drawItem);
-            drawPatrick();
-            animId = requestAnimationFrame(gameLoop);
+            g1_items.forEach(g1_drawItem);
+            g1_drawPatrick();
+            g1_animId = requestAnimationFrame(g1_gameLoop);
         }
 
-        function gameOver() {
-            gameRunning = false; 
-            cancelAnimationFrame(animId);
-            if (!scoreSaved && score > 0 && currentPlayer) { 
-                saveToLeaderboard(currentPlayer, score); 
-                scoreSaved = true; 
-                renderLeaderboard(); 
-            }
-            ctx.fillStyle = 'rgba(0,0,0,0.75)'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#FFD700'; 
-            ctx.font = 'bold 32px Arial'; 
-            ctx.textAlign = 'center';
-            ctx.fillText('ИГРА ОКОНЧЕНА', canvas.width / 2, canvas.height / 2 - 30);
-            ctx.fillStyle = 'white'; 
-            ctx.font = '22px Arial';
-            ctx.fillText(currentPlayer + ', счёт: ' + score, canvas.width / 2, canvas.height / 2 + 10);
-            ctx.fillStyle = '#FF69B4'; 
-            ctx.font = '18px Arial';
-            ctx.fillText('Нажми "Заново"', canvas.width / 2, canvas.height / 2 + 50);
+        function g1_gameOver() {
+            g1_gameRunning = false; cancelAnimationFrame(g1_animId);
+            if (!g1_scoreSaved && g1_score > 0 && currentPlayer) { saveToLeaderboard(currentPlayer, g1_score); g1_scoreSaved = true; renderLeaderboard(); }
+            g1_ctx.fillStyle = 'rgba(0,0,0,0.75)'; g1_ctx.fillRect(0, 0, g1_canvas.width, g1_canvas.height);
+            g1_ctx.fillStyle = '#FFD700'; g1_ctx.font = 'bold 32px Arial'; g1_ctx.textAlign = 'center';
+            g1_ctx.fillText('ИГРА ОКОНЧЕНА', g1_canvas.width / 2, g1_canvas.height / 2 - 30);
+            g1_ctx.fillStyle = 'white'; g1_ctx.font = '22px Arial';
+            g1_ctx.fillText(currentPlayer + ', счёт: ' + g1_score, g1_canvas.width / 2, g1_canvas.height / 2 + 10);
+            g1_ctx.fillStyle = '#FF69B4'; g1_ctx.font = '18px Arial';
+            g1_ctx.fillText('Нажми "Заново"', g1_canvas.width / 2, g1_canvas.height / 2 + 50);
         }
 
-        function startGame() { 
-            if (gameRunning) return; 
+        function startGame1() { 
+            if (g1_gameRunning) return; 
             if (!currentPlayer) { openNameModal(); return; } 
-            gameRunning = true; 
-            scoreSaved = false; 
-            spawnTimer = 0; 
-            gameLoop(); 
+            g1_gameRunning = true; g1_scoreSaved = false; g1_spawnTimer = 0; 
+            g1_gameLoop(); 
         }
         
-        function resetGame() {
-            gameRunning = false; 
-            cancelAnimationFrame(animId);
-            score = 0; 
-            lives = 3; 
-            items = []; 
-            effects = []; 
-            particles = []; 
-            difficulty = 1; 
-            scoreSaved = false;
-            scoreEl.textContent = score; 
-            livesEl.textContent = lives;
-            ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            drawBackground(); 
-            drawPatrick();
-            ctx.fillStyle = 'rgba(0,0,0,0.6)'; 
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#FF69B4'; 
-            ctx.font = 'bold 28px Arial'; 
-            ctx.textAlign = 'center';
-            ctx.fillText('Нажми "Начать"!', canvas.width / 2, canvas.height / 2);
+        function resetGame1() {
+            g1_gameRunning = false; cancelAnimationFrame(g1_animId);
+            g1_score = 0; g1_lives = 3; g1_items = []; g1_effects = []; g1_particles = []; g1_difficulty = 1; g1_scoreSaved = false;
+            document.getElementById('g1_score').textContent = 0; document.getElementById('g1_lives').textContent = 3;
+            g1_ctx.clearRect(0, 0, g1_canvas.width, g1_canvas.height); g1_drawBackground(); g1_drawPatrick();
+            g1_ctx.fillStyle = 'rgba(0,0,0,0.6)'; g1_ctx.fillRect(0, 0, g1_canvas.width, g1_canvas.height);
+            g1_ctx.fillStyle = '#FF69B4'; g1_ctx.font = 'bold 28px Arial'; g1_ctx.textAlign = 'center';
+            g1_ctx.fillText('Нажми "Начать"!', g1_canvas.width / 2, g1_canvas.height / 2);
         }
 
-        const keys = {};
-        document.addEventListener('keydown', e => { keys[e.key] = true; });
-        document.addEventListener('keyup', e => { keys[e.key] = false; });
+        const g1_keys = {};
+        document.addEventListener('keydown', e => { g1_keys[e.key] = true; });
+        document.addEventListener('keyup', e => { g1_keys[e.key] = false; });
         setInterval(() => {
-            if (!gameRunning) return;
-            if (keys['ArrowLeft'] || keys['a']) patrick.x -= 7;
-            if (keys['ArrowRight'] || keys['d']) patrick.x += 7;
-            patrick.x = Math.max(0, Math.min(canvas.width - patrick.width, patrick.x));
+            if (!g1_gameRunning) return;
+            if (g1_keys['ArrowLeft'] || g1_keys['a']) g1_patrick.x -= 7;
+            if (g1_keys['ArrowRight'] || g1_keys['d']) g1_patrick.x += 7;
+            g1_patrick.x = Math.max(0, Math.min(g1_canvas.width - g1_patrick.width, g1_patrick.x));
         }, 16);
 
-        canvas.addEventListener('mousemove', e => {
-            if (!gameRunning) return;
-            const r = canvas.getBoundingClientRect();
-            patrick.x = (e.clientX - r.left) * (canvas.width / r.width) - patrick.width / 2;
-            patrick.x = Math.max(0, Math.min(canvas.width - patrick.width, patrick.x));
-        });
-
-        canvas.addEventListener('touchmove', e => {
-            e.preventDefault();
-            if (!gameRunning) return;
-            const r = canvas.getBoundingClientRect();
-            patrick.x = (e.touches[0].clientX - r.left) * (canvas.width / r.width) - patrick.width / 2;
-            patrick.x = Math.max(0, Math.min(canvas.width - patrick.width, patrick.x));
+        g1_canvas.addEventListener('touchmove', e => {
+            e.preventDefault(); if (!g1_gameRunning) return;
+            const r = g1_canvas.getBoundingClientRect();
+            g1_patrick.x = (e.touches[0].clientX - r.left) * (g1_canvas.width / r.width) - g1_patrick.width / 2;
+            g1_patrick.x = Math.max(0, Math.min(g1_canvas.width - g1_patrick.width, g1_patrick.x));
         }, { passive: false });
 
-        resetGame();
+
+        // ==========================================
+        // ИГРА 2: ПАТРИК-АПОКАЛИПСИС (ВОЛНЫ)
+        // ==========================================
+        let g2_data = { crystals: 0, bestWave: 0, wins: 0, weaponLevel: 1, metaUpgrades: { health: 0, speed: 0 }, achievements: [], quests: {}, totalKills: 0, totalRuns: 0 };
+        const g2_weaponSystem = { types: ['normal', 'ice', 'fire'], typeNames: { 'normal': '🔵 Обычные', 'ice': '❄️ Ледяные', 'fire': '🔥 Огненные' }, typeColors: { 'normal': '#FFFF00', 'ice': '#00BFFF', 'fire': '#FF4500' } };
+        const g2_metaUpgrades = [
+            { id: 'health', name: '❤️ Здоровье', desc: '+10 к максимальному HP', cost: 100, maxLevel: 10 },
+            { id: 'speed', name: '👟 Скорость', desc: '+10% к скорости', cost: 150, maxLevel: 5 },
+            { id: 'weapon', name: '🔫 Уровень оружия', desc: 'Улучшает пули', cost: 300, maxLevel: 24 }
+        ];
+        const g2_achievements = [
+            { id: 'first_run', name: 'Первый забег', desc: 'Сыграй первую игру', icon: '🎮', check: () => g2_data.totalRuns >= 1 },
+            { id: 'kills_100', name: 'Сотня', desc: 'Убей 100 Патриков', icon: '💀', check: () => g2_data.totalKills >= 100 },
+            { id: 'wave_5', name: 'Пятая волна', desc: 'Дойди до 5 волны', icon: '🌊', check: () => g2_data.bestWave >= 5 },
+            { id: 'weapon_max', name: 'MAX Оружие', desc: 'Купи MAX уровень оружия', icon: '🔫', check: () => g2_data.weaponLevel >= 24 },
+            { id: 'crystals_500', name: 'Богач', desc: 'Накопи 500 кристаллов', icon: '💎', check: () => g2_data.crystals >= 500 }
+        ];
+
+        function g2_getDailySeed() { const today = new Date(); return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate(); }
+        const g2_dailySeed = g2_getDailySeed();
+
+        function g2_generateDailyQuests() {
+            const today = new Date().toDateString();
+            if (g2_data.quests.date !== today) {
+                g2_data.quests = { date: today, kills: { target: 50 + g2_data.weaponLevel * 5, current: 0, reward: 50, completed: false }, wave: { target: 5, current: 0, reward: 75, completed: false }, crystals: { target: 200, current: 0, reward: 100, completed: false } };
+            }
+        }
+
+        function g2_loadGameData() {
+            const saved = localStorage.getItem('patrickDailyGame');
+            if (saved) { try { g2_data = { ...g2_data, ...JSON.parse(saved) }; } catch(e) {} }
+            g2_generateDailyQuests(); g2_updateMenuDisplay(); g2_renderMetaUpgrades(); g2_renderQuests(); g2_renderAchievements();
+        }
+        function g2_saveGameData() { localStorage.setItem('patrickDailyGame', JSON.stringify(g2_data)); }
+
+        const g2_canvas = document.getElementById('canvas2');
+        const g2_ctx = g2_canvas.getContext('2d');
+        let g2_gameRunning = false, g2_gamePaused = false;
+        let g2_player, g2_enemies, g2_projectiles, g2_particles;
+        let g2_lastTime = 0, g2_animId, g2_keys = {}, g2_runKills = 0, g2_currentWave = 1, g2_enemiesInWave = 0, g2_enemiesSpawned = 0, g2_waveComplete = false, g2_waveTimer = 0;
+
+        function g2_seededRandom(seed) { let s = seed; return function() { s = (s * 9301 + 49297) % 233280; return s / 233280; }; }
+        function g2_getWaveEnemies(wave) {
+            if (wave <= 0) return 0; if (wave === 1) return 10;
+            let total = 10; const rng = g2_seededRandom(wave * 7919);
+            for (let i = 2; i <= wave; i++) total += 2 + Math.floor(rng() * 4);
+            return total;
+        }
+        function g2_getWeaponType(level) { if (level <= 8) return 'normal'; if (level <= 16) return 'ice'; return 'fire'; }
+        function g2_getBulletsCount(level) { if (level <= 8) return level; if (level <= 16) return level - 8; return level - 16; }
+        function g2_getWeaponDisplay(level) {
+            if (level >= 24) return '🔥 MAX';
+            return g2_weaponSystem.typeNames[g2_getWeaponType(level)] + ' ' + g2_getBulletsCount(level);
+        }
+        function g2_getWaveInfo(wave) {
+            const enemies = g2_getWaveEnemies(wave);
+            return `Волна ${wave}: ${enemies} Патриков${wave % 5 === 0 ? ' + БОСС 👑' : ''}`;
+        }
+
+        function g2_drawSpongebob(x, y, size) {
+            g2_ctx.fillStyle = '#FFE135'; g2_ctx.fillRect(x - size, y - size, size * 2, size * 2);
+            g2_ctx.strokeStyle = '#8B6914'; g2_ctx.lineWidth = 2; g2_ctx.strokeRect(x - size, y - size, size * 2, size * 2);
+            g2_ctx.fillStyle = '#C8A800';
+            g2_ctx.beginPath(); g2_ctx.arc(x - 8, y - 5, 3, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x + 10, y + 8, 2, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x - 5, y + 12, 2.5, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.fillStyle = 'white';
+            g2_ctx.beginPath(); g2_ctx.arc(x - 6, y - 8, 7, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x + 6, y - 8, 7, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.strokeStyle = '#333'; g2_ctx.lineWidth = 1; g2_ctx.stroke();
+            g2_ctx.fillStyle = '#4A90E2';
+            g2_ctx.beginPath(); g2_ctx.arc(x - 6, y - 8, 3, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x + 6, y - 8, 3, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.fillStyle = 'black';
+            g2_ctx.beginPath(); g2_ctx.arc(x - 6, y - 8, 1.5, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x + 6, y - 8, 1.5, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.fillStyle = '#FFE135'; g2_ctx.beginPath(); g2_ctx.ellipse(x, y - 2, 3, 5, 0, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.strokeStyle = '#8B6914'; g2_ctx.stroke();
+            g2_ctx.strokeStyle = '#8B0000'; g2_ctx.lineWidth = 2; g2_ctx.beginPath(); g2_ctx.arc(x, y + 5, 8, 0, Math.PI); g2_ctx.stroke();
+            g2_ctx.fillStyle = 'white';
+            g2_ctx.fillRect(x - 3, y + 5, 3, 4); g2_ctx.fillRect(x + 1, y + 5, 3, 4);
+            g2_ctx.strokeStyle = '#333'; g2_ctx.lineWidth = 0.5;
+            g2_ctx.strokeRect(x - 3, y + 5, 3, 4); g2_ctx.strokeRect(x + 1, y + 5, 3, 4);
+            g2_ctx.fillStyle = 'white'; g2_ctx.fillRect(x - size, y + size - 8, size * 2, 8);
+            g2_ctx.strokeStyle = '#333'; g2_ctx.lineWidth = 1; g2_ctx.strokeRect(x - size, y + size - 8, size * 2, 8);
+            g2_ctx.fillStyle = '#FF0000'; g2_ctx.beginPath();
+            g2_ctx.moveTo(x - 3, y + size - 8); g2_ctx.lineTo(x + 3, y + size - 8); g2_ctx.lineTo(x + 5, y + size - 3);
+            g2_ctx.lineTo(x, y + size); g2_ctx.lineTo(x - 5, y + size - 3); g2_ctx.closePath(); g2_ctx.fill();
+            g2_ctx.fillStyle = '#8B4513'; g2_ctx.fillRect(x - size, y + size, size * 2, 6);
+            g2_ctx.strokeStyle = '#333'; g2_ctx.lineWidth = 1; g2_ctx.strokeRect(x - size, y + size, size * 2, 6);
+            g2_ctx.fillStyle = 'black'; g2_ctx.fillRect(x - size, y + size, size * 2, 2);
+        }
+
+        function g2_drawPatrick(x, y, size, isBoss, effects) {
+            const s = isBoss ? size * 1.5 : size;
+            g2_ctx.fillStyle = 'rgba(0,0,0,0.3)'; g2_ctx.beginPath(); g2_ctx.ellipse(x, y + s + 5, s * 0.8, s * 0.3, 0, 0, Math.PI * 2); g2_ctx.fill();
+            let bodyColor = isBoss ? '#FF1493' : '#FF69B4';
+            if (effects && effects.frozen) bodyColor = '#87CEEB';
+            if (effects && effects.burning) bodyColor = '#FF6347';
+            g2_ctx.fillStyle = bodyColor; g2_ctx.beginPath();
+            g2_ctx.moveTo(x, y - s); g2_ctx.lineTo(x + s * 0.3, y - s * 0.3); g2_ctx.lineTo(x + s, y - s * 0.2);
+            g2_ctx.lineTo(x + s * 0.4, y + s * 0.1); g2_ctx.lineTo(x + s * 0.6, y + s); g2_ctx.lineTo(x + s * 0.2, y + s * 0.6);
+            g2_ctx.lineTo(x - s * 0.2, y + s * 0.6); g2_ctx.lineTo(x - s * 0.6, y + s); g2_ctx.lineTo(x - s * 0.4, y + s * 0.1);
+            g2_ctx.lineTo(x - s, y - s * 0.2); g2_ctx.lineTo(x - s * 0.3, y - s * 0.3); g2_ctx.closePath(); g2_ctx.fill();
+            g2_ctx.strokeStyle = '#C71585'; g2_ctx.lineWidth = 2; g2_ctx.stroke();
+            const grad = g2_ctx.createRadialGradient(x - s*0.3, y - s*0.3, 0, x, y, s);
+            grad.addColorStop(0, 'rgba(255,255,255,0.3)'); grad.addColorStop(1, 'rgba(0,0,0,0.1)');
+            g2_ctx.fillStyle = grad; g2_ctx.beginPath();
+            g2_ctx.moveTo(x, y - s); g2_ctx.lineTo(x + s * 0.3, y - s * 0.3); g2_ctx.lineTo(x + s, y - s * 0.2);
+            g2_ctx.lineTo(x + s * 0.4, y + s * 0.1); g2_ctx.lineTo(x + s * 0.6, y + s); g2_ctx.lineTo(x + s * 0.2, y + s * 0.6);
+            g2_ctx.lineTo(x - s * 0.2, y + s * 0.6); g2_ctx.lineTo(x - s * 0.6, y + s); g2_ctx.lineTo(x - s * 0.4, y + s * 0.1);
+            g2_ctx.lineTo(x - s, y - s * 0.2); g2_ctx.lineTo(x - s * 0.3, y - s * 0.3); g2_ctx.closePath(); g2_ctx.fill();
+            g2_ctx.fillStyle = 'white'; g2_ctx.beginPath();
+            g2_ctx.arc(x - s*0.25, y - s*0.1, s*0.25, 0, Math.PI * 2); g2_ctx.arc(x + s*0.25, y - s*0.1, s*0.25, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.strokeStyle = '#333'; g2_ctx.lineWidth = 1.5; g2_ctx.stroke();
+            g2_ctx.fillStyle = isBoss ? '#FF0000' : '#8B0000'; g2_ctx.beginPath();
+            g2_ctx.arc(x - s*0.25, y - s*0.1, s*0.12, 0, Math.PI * 2); g2_ctx.arc(x + s*0.25, y - s*0.1, s*0.12, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.fillStyle = 'black'; g2_ctx.beginPath();
+            g2_ctx.arc(x - s*0.25, y - s*0.1, s*0.06, 0, Math.PI * 2); g2_ctx.arc(x + s*0.25, y - s*0.1, s*0.06, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.strokeStyle = '#8B0000'; g2_ctx.lineWidth = 3; g2_ctx.beginPath();
+            g2_ctx.moveTo(x - s*0.4, y - s*0.35); g2_ctx.lineTo(x - s*0.1, y - s*0.25);
+            g2_ctx.moveTo(x + s*0.4, y - s*0.35); g2_ctx.lineTo(x + s*0.1, y - s*0.25); g2_ctx.stroke();
+            g2_ctx.strokeStyle = '#8B0000'; g2_ctx.lineWidth = 2; g2_ctx.beginPath(); g2_ctx.arc(x, y + s*0.2, s*0.3, 0, Math.PI); g2_ctx.stroke();
+            g2_ctx.fillStyle = 'white';
+            for (let i = 0; i < 4; i++) { const tx = x - s*0.25 + (i * s*0.17); g2_ctx.fillRect(tx, y + s*0.2, s*0.1, s*0.15); g2_ctx.strokeStyle = '#333'; g2_ctx.lineWidth = 0.5; g2_ctx.strokeRect(tx, y + s*0.2, s*0.1, s*0.15); }
+            g2_ctx.fillStyle = '#9ACD32'; g2_ctx.beginPath();
+            g2_ctx.moveTo(x - s*0.5, y + s*0.5); g2_ctx.lineTo(x + s*0.5, y + s*0.5); g2_ctx.lineTo(x + s*0.45, y + s*0.8);
+            g2_ctx.lineTo(x + s*0.1, y + s*0.75); g2_ctx.lineTo(x, y + s*0.85); g2_ctx.lineTo(x - s*0.1, y + s*0.75); g2_ctx.lineTo(x - s*0.45, y + s*0.8); g2_ctx.closePath(); g2_ctx.fill();
+            g2_ctx.strokeStyle = '#7CB342'; g2_ctx.lineWidth = 1.5; g2_ctx.stroke();
+            g2_ctx.fillStyle = '#9C27B0';
+            g2_ctx.beginPath(); g2_ctx.arc(x - s*0.2, y + s*0.65, s*0.08, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x + s*0.2, y + s*0.65, s*0.08, 0, Math.PI * 2); g2_ctx.fill();
+            g2_ctx.beginPath(); g2_ctx.arc(x, y + s*0.7, s*0.08, 0, Math.PI * 2); g2_ctx.fill();
+            if (isBoss) {
+                g2_ctx.fillStyle = '#FFD700'; g2_ctx.beginPath();
+                g2_ctx.moveTo(x - s*0.4, y - s*0.9); g2_ctx.lineTo(x - s*0.3, y - s*1.1); g2_ctx.lineTo(x - s*0.15, y - s*0.95);
+                g2_ctx.lineTo(x, y - s*1.15); g2_ctx.lineTo(x + s*0.15, y - s*0.95); g2_ctx.lineTo(x + s*0.3, y - s*1.1); g2_ctx.lineTo(x + s*0.4, y - s*0.9); g2_ctx.closePath(); g2_ctx.fill();
+                g2_ctx.strokeStyle = '#FFA500'; g2_ctx.lineWidth = 2; g2_ctx.stroke();
+                g2_ctx.fillStyle = '#FF0000'; g2_ctx.beginPath(); g2_ctx.arc(x, y - s*1.05, s*0.08, 0, Math.PI * 2); g2_ctx.fill();
+                g2_ctx.fillStyle = '#00BFFF'; g2_ctx.beginPath(); g2_ctx.arc(x - s*0.25, y - s*1.0, s*0.06, 0, Math.PI * 2); g2_ctx.fill();
+                g2_ctx.beginPath(); g2_ctx.arc(x + s*0.25, y - s*1.0, s*0.06, 0, Math.PI * 2); g2_ctx.fill();
+            }
+            if (effects) {
+                if (effects.frozen) { g2_ctx.fillStyle = 'rgba(0,191,255,0.3)'; g2_ctx.beginPath(); g2_ctx.arc(x, y, s * 1.2, 0, Math.PI * 2); g2_ctx.fill(); }
+                if (effects.burning) {
+                    g2_ctx.fillStyle = 'rgba(255,69,0,0.3)'; g2_ctx.beginPath(); g2_ctx.arc(x, y, s * 1.2, 0, Math.PI * 2); g2_ctx.fill();
+                    for (let i = 0; i < 3; i++) { const fx = x + (Math.random() - 0.5) * s, fy = y - s + Math.random() * s * 0.5; g2_ctx.fillStyle = '#FF4500'; g2_ctx.beginPath(); g2_ctx.arc(fx, fy, 3, 0, Math.PI * 2); g2_ctx.fill(); }
+                }
+            }
+        }
+
+        function startGame2() {
+            document.getElementById('menuScreen2').classList.add('hidden');
+            document.getElementById('gameOverScreen2').classList.add('hidden');
+            document.getElementById('gameScreen2').classList.remove('hidden');
+            g2_player = { x: g2_canvas.width / 2, y: g2_canvas.height / 2, size: 18, speed: 3 + g2_data.metaUpgrades.speed * 0.3, health: 100 + g2_data.metaUpgrades.health * 10, maxHealth: 100 + g2_data.metaUpgrades.health * 10, damage: 10, attackSpeed: 1000, lastAttack: 0, magnetRange: 100, regen: 0, critChance: 0.05 };
+            g2_enemies = []; g2_projectiles = []; g2_particles = [];
+            g2_runKills = 0; g2_currentWave = 1; g2_enemiesInWave = g2_getWaveEnemies(1); g2_enemiesSpawned = 0;
+            g2_waveComplete = false; g2_waveTimer = 0; g2_gameRunning = true; g2_gamePaused = false;
+            g2_data.totalRuns++; g2_updateHUD(); g2_lastTime = performance.now();
+            if (g2_animId) cancelAnimationFrame(g2_animId);
+            g2_animId = requestAnimationFrame(g2_gameLoop);
+        }
+
+        function g2_gameLoop(timestamp) {
+            if (!g2_gameRunning) return;
+            if (!g2_gamePaused) {
+                const deltaTime = Math.min(timestamp - g2_lastTime, 100); g2_lastTime = timestamp;
+                g2_update(deltaTime, timestamp); g2_render();
+            } else { g2_lastTime = timestamp; }
+            g2_animId = requestAnimationFrame(g2_gameLoop);
+        }
+
+        function g2_update(deltaTime, timestamp) {
+            let dx = 0, dy = 0;
+            if (g2_keys['ArrowLeft'] || g2_keys['a'] || g2_keys['A']) dx -= 1;
+            if (g2_keys['ArrowRight'] || g2_keys['d'] || g2_keys['D']) dx += 1;
+            if (g2_keys['ArrowUp'] || g2_keys['w'] || g2_keys['W']) dy -= 1;
+            if (g2_keys['ArrowDown'] || g2_keys['s'] || g2_keys['S']) dy += 1;
+            if (dx !== 0 || dy !== 0) { const len = Math.sqrt(dx * dx + dy * dy); g2_player.x += (dx / len) * g2_player.speed; g2_player.y += (dy / len) * g2_player.speed; }
+            g2_player.x = Math.max(g2_player.size, Math.min(g2_canvas.width - g2_player.size, g2_player.x));
+            g2_player.y = Math.max(g2_player.size, Math.min(g2_canvas.height - g2_player.size, g2_player.y));
+            if (g2_player.regen > 0) g2_player.health = Math.min(g2_player.maxHealth, g2_player.health + g2_player.regen * deltaTime / 1000);
+            if (timestamp - g2_player.lastAttack >= g2_player.attackSpeed) { g2_attack(); g2_player.lastAttack = timestamp; }
+            
+            if (!g2_waveComplete) {
+                const spawnRate = Math.max(1500, 2500 - g2_currentWave * 50);
+                if (g2_enemiesSpawned < g2_enemiesInWave && Math.random() < deltaTime / spawnRate) { g2_spawnEnemy(); g2_enemiesSpawned++; }
+                if (g2_enemiesSpawned >= g2_enemiesInWave && g2_enemies.length === 0) { g2_waveComplete = true; g2_waveTimer = 5000; }
+            } else {
+                g2_waveTimer -= deltaTime;
+                if (g2_waveTimer <= 0) {
+                    g2_currentWave++; g2_enemiesInWave = g2_getWaveEnemies(g2_currentWave); g2_enemiesSpawned = 0; g2_waveComplete = false;
+                    if (g2_data.quests.wave) g2_data.quests.wave.current = g2_currentWave;
+                    if (g2_currentWave > g2_data.bestWave) g2_data.bestWave = g2_currentWave;
+                }
+            }
+            g2_updateEnemies(deltaTime, timestamp); g2_updateProjectiles(deltaTime); g2_updateParticles(deltaTime);
+            if (g2_data.quests.crystals) g2_data.quests.crystals.current = g2_data.crystals;
+            g2_checkAchievements(); g2_updateHUD();
+        }
+
+        function g2_spawnEnemy() {
+            const angle = Math.random() * Math.PI * 2, dist = 350;
+            const isBoss = g2_currentWave % 5 === 0 && g2_enemiesSpawned === g2_enemiesInWave - 1;
+            g2_enemies.push({ x: g2_player.x + Math.cos(angle) * dist, y: g2_player.y + Math.sin(angle) * dist, size: isBoss ? 30 : 18, speed: isBoss ? 1.2 : (1 + Math.random() * 0.8 + g2_currentWave * 0.05), health: isBoss ? (50 + g2_currentWave * 10) : (10 + g2_currentWave * 2), maxHealth: isBoss ? (50 + g2_currentWave * 10) : (10 + g2_currentWave * 2), damage: isBoss ? 10 : 2, isBoss: isBoss, effects: { frozen: 0, burning: 0 }, lastDamageTime: 0 });
+        }
+
+        function g2_attack() {
+            let target = null, minDist = Infinity;
+            for (const enemy of g2_enemies) { const dist = Math.sqrt((enemy.x - g2_player.x)**2 + (enemy.y - g2_player.y)**2); if (dist < minDist) { minDist = dist; target = enemy; } }
+            const angle = target ? Math.atan2(target.y - g2_player.y, target.x - g2_player.x) : Math.random() * Math.PI * 2;
+            const bullets = g2_getBulletsCount(g2_data.weaponLevel), weaponType = g2_getWeaponType(g2_data.weaponLevel);
+            for (let i = 0; i < bullets; i++) {
+                const spread = (i - (bullets - 1) / 2) * 0.3, isCrit = Math.random() < g2_player.critChance;
+                g2_projectiles.push({ x: g2_player.x, y: g2_player.y, vx: Math.cos(angle + spread) * 6, vy: Math.sin(angle + spread) * 6, damage: g2_player.damage * (isCrit ? 2 : 1), isCrit: isCrit, size: isCrit ? 10 : 7, life: 1500, type: weaponType });
+            }
+        }
+
+        function g2_updateEnemies(deltaTime, timestamp) {
+            for (let i = g2_enemies.length - 1; i >= 0; i--) {
+                const enemy = g2_enemies[i];
+                if (enemy.effects.frozen > 0) enemy.effects.frozen -= deltaTime;
+                if (enemy.effects.burning > 0) {
+                    enemy.effects.burning -= deltaTime; enemy.health -= 2 * (deltaTime / 1000);
+                    if (enemy.health <= 0) { g2_runKills++; g2_data.totalKills++; if (g2_data.quests.kills) g2_data.quests.kills.current++; g2_data.crystals += enemy.isBoss ? 20 : 5; g2_enemies.splice(i, 1); continue; }
+                }
+                const dx = g2_player.x - enemy.x, dy = g2_player.y - enemy.y, dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist > 0) { let currentSpeed = enemy.speed; if (enemy.effects.frozen > 0) currentSpeed *= 0.5; enemy.x += (dx / dist) * currentSpeed; enemy.y += (dy / dist) * currentSpeed; }
+                if (dist < g2_player.size + enemy.size) {
+                    if (!enemy.lastDamageTime) enemy.lastDamageTime = 0;
+                    if (timestamp - enemy.lastDamageTime >= 500) { g2_player.health -= enemy.damage; enemy.lastDamageTime = timestamp; }
+                    if (g2_player.health <= 0) { g2_gameOver(false); return; }
+                }
+            }
+        }
+
+        function g2_updateProjectiles(deltaTime) {
+            for (let i = g2_projectiles.length - 1; i >= 0; i--) {
+                const proj = g2_projectiles[i]; proj.x += proj.vx; proj.y += proj.vy; proj.life -= deltaTime;
+                if (proj.life <= 0 || proj.x < -20 || proj.x > g2_canvas.width + 20 || proj.y < -20 || proj.y > g2_canvas.height + 20) { g2_projectiles.splice(i, 1); continue; }
+                for (let j = g2_enemies.length - 1; j >= 0; j--) {
+                    const enemy = g2_enemies[j];
+                    if (Math.sqrt((proj.x - enemy.x)**2 + (proj.y - enemy.y)**2) < proj.size + enemy.size) {
+                        enemy.health -= proj.damage;
+                        if (proj.type === 'ice') enemy.effects.frozen = 3000;
+                        if (proj.type === 'fire') enemy.effects.burning = 5000;
+                        for (let k = 0; k < 4; k++) g2_particles.push({ x: enemy.x, y: enemy.y, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4, life: 400, color: proj.isCrit ? '#FFD700' : g2_weaponSystem.typeColors[proj.type] });
+                        g2_projectiles.splice(i, 1);
+                        if (enemy.health <= 0) {
+                            g2_runKills++; g2_data.totalKills++; if (g2_data.quests.kills) g2_data.quests.kills.current++;
+                            g2_data.crystals += enemy.isBoss ? 20 : 5; g2_enemies.splice(j, 1);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        function g2_updateParticles(deltaTime) {
+            for (let i = g2_particles.length - 1; i >= 0; i--) {
+                const p = g2_particles[i]; p.x += p.vx; p.y += p.vy; p.life -= deltaTime;
+                if (p.life <= 0) g2_particles.splice(i, 1);
+            }
+        }
+
+        function g2_render() {
+            g2_ctx.fillStyle = '#0a0a0a'; g2_ctx.fillRect(0, 0, g2_canvas.width, g2_canvas.height);
+            g2_ctx.strokeStyle = 'rgba(255,255,255,0.05)'; g2_ctx.lineWidth = 1;
+            for (let i = 0; i < g2_canvas.width; i += 50) { g2_ctx.beginPath(); g2_ctx.moveTo(i, 0); g2_ctx.lineTo(i, g2_canvas.height); g2_ctx.stroke(); }
+            for (let i = 0; i < g2_canvas.height; i += 50) { g2_ctx.beginPath(); g2_ctx.moveTo(0, i); g2_ctx.lineTo(g2_canvas.width, i); g2_ctx.stroke(); }
+            g2_enemies.forEach(enemy => {
+                g2_drawPatrick(enemy.x, enemy.y, enemy.size, enemy.isBoss, enemy.effects);
+                const barWidth = enemy.size * 2, barHeight = 4;
+                g2_ctx.fillStyle = 'rgba(0,0,0,0.7)'; g2_ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.size - 15, barWidth, barHeight);
+                g2_ctx.fillStyle = '#00FF00'; g2_ctx.fillRect(enemy.x - barWidth/2, enemy.y - enemy.size - 15, barWidth * (enemy.health / enemy.maxHealth), barHeight);
+            });
+            g2_projectiles.forEach(proj => {
+                g2_ctx.fillStyle = proj.isCrit ? '#FFD700' : g2_weaponSystem.typeColors[proj.type];
+                g2_ctx.shadowBlur = 8; g2_ctx.shadowColor = g2_ctx.fillStyle;
+                g2_ctx.beginPath(); g2_ctx.arc(proj.x, proj.y, proj.size, 0, Math.PI * 2); g2_ctx.fill();
+            });
+            g2_ctx.shadowBlur = 0;
+            g2_drawSpongebob(g2_player.x, g2_player.y, g2_player.size);
+            g2_particles.forEach(p => { g2_ctx.fillStyle = p.color; g2_ctx.globalAlpha = Math.max(0, p.life / 400); g2_ctx.beginPath(); g2_ctx.arc(p.x, p.y, 3, 0, Math.PI * 2); g2_ctx.fill(); });
+            g2_ctx.globalAlpha = 1;
+            if (g2_waveComplete) {
+                g2_ctx.fillStyle = 'rgba(0,0,0,0.7)'; g2_ctx.fillRect(0, 0, g2_canvas.width, g2_canvas.height);
+                g2_ctx.fillStyle = '#FFD700'; g2_ctx.font = 'bold 40px Arial'; g2_ctx.textAlign = 'center';
+                g2_ctx.fillText('🌊 ВОЛНА ' + g2_currentWave + ' ПРОЙДЕНА!', g2_canvas.width/2, g2_canvas.height/2 - 20);
+                g2_ctx.font = 'bold 24px Arial'; g2_ctx.fillText('Следующая волна через ' + Math.ceil(g2_waveTimer / 1000) + '...', g2_canvas.width/2, g2_canvas.height/2 + 30);
+            }
+            if (g2_gamePaused) {
+                g2_ctx.fillStyle = 'rgba(0,0,0,0.7)'; g2_ctx.fillRect(0, 0, g2_canvas.width, g2_canvas.height);
+                g2_ctx.fillStyle = '#FFD700'; g2_ctx.font = 'bold 40px Arial'; g2_ctx.textAlign = 'center';
+                g2_ctx.fillText('⏸️ ПАУЗА', g2_canvas.width/2, g2_canvas.height/2);
+            }
+        }
+
+        function g2_updateHUD() {
+            if (!g2_player) return;
+            document.getElementById('health').textContent = Math.floor(g2_player.health);
+            document.getElementById('wave').textContent = g2_currentWave;
+            document.getElementById('weaponLevelDisplay').textContent = g2_getWeaponDisplay(g2_data.weaponLevel);
+            document.getElementById('kills').textContent = g2_runKills;
+            document.getElementById('waveInfo').textContent = g2_getWaveInfo(g2_currentWave);
+        }
+
+        function g2_gameOver(won) {
+            g2_gameRunning = false; if (g2_animId) cancelAnimationFrame(g2_animId);
+            const crystalsEarned = Math.floor(g2_currentWave * 10 + g2_runKills * 2);
+            g2_data.crystals += crystalsEarned;
+            if (g2_currentWave > g2_data.bestWave) g2_data.bestWave = g2_currentWave;
+            if (won) g2_data.wins++;
+            if (g2_data.quests.kills && g2_data.quests.kills.current >= g2_data.quests.kills.target && !g2_data.quests.kills.completed) { g2_data.quests.kills.completed = true; g2_data.crystals += g2_data.quests.kills.reward; }
+            if (g2_data.quests.wave && g2_data.quests.wave.current >= g2_data.quests.wave.target && !g2_data.quests.wave.completed) { g2_data.quests.wave.completed = true; g2_data.crystals += g2_data.quests.wave.reward; }
+            if (g2_data.quests.crystals && g2_data.quests.crystals.current >= g2_data.quests.crystals.target && !g2_data.quests.crystals.completed) { g2_data.quests.crystals.completed = true; g2_data.crystals += g2_data.quests.crystals.reward; }
+            
+            // Сохраняем рекорд волны в общий лидерборд
+            saveToLeaderboard(currentPlayer, g2_currentWave);
+
+            document.getElementById('gameScreen2').classList.add('hidden');
+            document.getElementById('gameOverScreen2').classList.remove('hidden');
+            document.getElementById('gameOverTitle').textContent = won ? '🏆 Победа!' : '💀 Игра окончена!';
+            document.getElementById('finalWave').textContent = g2_currentWave;
+            document.getElementById('finalKills').textContent = g2_runKills;
+            document.getElementById('finalScore').textContent = g2_runKills * 10;
+            document.getElementById('finalCrystals').textContent = '+' + crystalsEarned;
+            g2_checkAchievements(); g2_saveGameData();
+        }
+
+        function pauseGame2() { if (g2_gameRunning) g2_gamePaused = !g2_gamePaused; }
+        function backToMenu2() {
+            g2_gameRunning = false; if (g2_animId) cancelAnimationFrame(g2_animId);
+            document.getElementById('gameScreen2').classList.add('hidden');
+            document.getElementById('gameOverScreen2').classList.add('hidden');
+            document.getElementById('menuScreen2').classList.remove('hidden');
+            g2_updateMenuDisplay(); g2_renderMetaUpgrades(); g2_renderQuests(); g2_renderAchievements();
+        }
+
+        function g2_buyMetaUpgrade(id) {
+            const upgrade = g2_metaUpgrades.find(u => u.id === id);
+            const currentLevel = g2_data.metaUpgrades[id] || 0;
+            if (currentLevel >= upgrade.maxLevel) { showModal(id === 'weapon' ? '🔥 MAX УРОВЕНЬ!' : 'MAX УРОВЕНЬ!', id === 'weapon' ? 'Больше прокачивать нельзя! У тебя MAX уровень оружия!' : 'Это улучшение уже на максимальном уровне!'); return; }
+            const cost = upgrade.cost * (currentLevel + 1);
+            if (g2_data.crystals >= cost) {
+                g2_data.crystals -= cost; g2_data.metaUpgrades[id] = currentLevel + 1;
+                if (id === 'weapon') { g2_data.weaponLevel = currentLevel + 1; if (g2_data.weaponLevel >= 24) showModal('🔥 MAX УРОВЕНЬ!', 'Поздравляем! Ты достиг MAX уровня оружия!'); }
+                g2_updateMenuDisplay(); g2_renderMetaUpgrades(); g2_saveGameData();
+            }
+        }
+
+        function g2_renderMetaUpgrades() {
+            const list = document.getElementById('metaUpgrades'); list.innerHTML = '';
+            g2_metaUpgrades.forEach(upgrade => {
+                const currentLevel = g2_data.metaUpgrades[upgrade.id] || 0;
+                const cost = upgrade.cost * (currentLevel + 1);
+                const canAfford = g2_data.crystals >= cost && currentLevel < upgrade.maxLevel;
+                const isMax = currentLevel >= upgrade.maxLevel;
+                const div = document.createElement('div'); div.className = 'meta-upgrade';
+                div.innerHTML = '<div class="meta-upgrade-info"><h3>' + upgrade.name + ' (Ур. ' + currentLevel + '/' + upgrade.maxLevel + ')</h3><p>' + upgrade.desc + '</p></div>' + '<button class="btn ' + (canAfford ? 'btn-gold' : '') + '" ' + (canAfford ? '' : 'disabled') + ' onclick="g2_buyMetaUpgrade(\'' + upgrade.id + '\')">' + (isMax ? '🔥 MAX' : '💎 ' + cost) + '</button>';
+                list.appendChild(div);
+            });
+        }
+
+        function g2_renderQuests() {
+            const list = document.getElementById('questList'); list.innerHTML = '';
+            [{ id: 'kills', name: '💀 Убийства', desc: 'Убей Патриков' }, { id: 'wave', name: '🌊 Волна', desc: 'Дойди до волны' }, { id: 'crystals', name: '💎 Кристаллы', desc: 'Накопи кристаллы' }].forEach(q => {
+                const quest = g2_data.quests[q.id]; if (!quest) return;
+                const progress = Math.min(100, (quest.current / quest.target) * 100);
+                const div = document.createElement('div'); div.className = 'quest-item' + (quest.completed ? ' completed' : '');
+                div.innerHTML = '<h3>' + q.name + ' ' + (quest.completed ? '✅' : '') + '</h3><p>' + q.desc + '</p><div class="quest-progress"><div class="quest-progress-bar" style="width: ' + progress + '%"></div></div><p>' + quest.current + ' / ' + quest.target + ' | Награда: ' + quest.reward + ' 💎</p>';
+                list.appendChild(div);
+            });
+        }
+
+        function g2_checkAchievements() {
+            g2_achievements.forEach(ach => { if (!g2_data.achievements.includes(ach.id) && ach.check()) { g2_data.achievements.push(ach.id); g2_data.crystals += 200; } });
+        }
+
+        function g2_renderAchievements() {
+            const list = document.getElementById('achievementList'); list.innerHTML = '';
+            g2_achievements.forEach(ach => {
+                const unlocked = g2_data.achievements.includes(ach.id);
+                const div = document.createElement('div'); div.className = 'achievement' + (unlocked ? ' unlocked' : '');
+                div.innerHTML = '<div class="achievement-icon">' + ach.icon + '</div><div class="achievement-info"><h3>' + ach.name + ' ' + (unlocked ? '✅' : '🔒') + '</h3><p>' + ach.desc + '</p></div>';
+                list.appendChild(div);
+            });
+        }
+
+        function g2_updateMenuDisplay() {
+            document.getElementById('crystals').textContent = g2_data.crystals;
+            document.getElementById('bestWave').textContent = g2_data.bestWave;
+            document.getElementById('weaponLevel').textContent = g2_getWeaponDisplay(g2_data.weaponLevel);
+            document.getElementById('wins').textContent = g2_data.wins;
+        }
+
+        function switchTab(tabName, el) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            el.classList.add('active'); document.getElementById(tabName).classList.add('active');
+        }
+
+        function showModal(title, text) { document.getElementById('modalTitle').textContent = title; document.getElementById('modalText').textContent = text; document.getElementById('gameModal').classList.add('active'); }
+        function closeModal() { document.getElementById('gameModal').classList.remove('active'); }
+
+        document.addEventListener('keydown', e => { g2_keys[e.key] = true; if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault(); });
+        document.addEventListener('keyup', e => { g2_keys[e.key] = false; });
+
+        let g2_touchTarget = null;
+        g2_canvas.addEventListener('touchstart', e => { e.preventDefault(); const rect = g2_canvas.getBoundingClientRect(); const touch = e.touches[0]; g2_touchTarget = { x: (touch.clientX - rect.left) * (g2_canvas.width / rect.width), y: (touch.clientY - rect.top) * (g2_canvas.height / rect.height) }; }, { passive: false });
+        g2_canvas.addEventListener('touchmove', e => {
+            e.preventDefault(); if (!g2_touchTarget || !g2_player) return;
+            const rect = g2_canvas.getBoundingClientRect(); const touch = e.touches[0];
+            g2_touchTarget = { x: (touch.clientX - rect.left) * (g2_canvas.width / rect.width), y: (touch.clientY - rect.top) * (g2_canvas.height / rect.height) };
+            const dx = g2_touchTarget.x - g2_player.x, dy = g2_touchTarget.y - g2_player.y;
+            g2_keys['ArrowLeft'] = dx < -15; g2_keys['ArrowRight'] = dx > 15; g2_keys['ArrowUp'] = dy < -15; g2_keys['ArrowDown'] = dy > 15;
+        }, { passive: false });
+        g2_canvas.addEventListener('touchend', e => { e.preventDefault(); g2_touchTarget = null; g2_keys['ArrowLeft'] = false; g2_keys['ArrowRight'] = false; g2_keys['ArrowUp'] = false; g2_keys['ArrowDown'] = false; });
+
+        // Инициализация при загрузке
+        g2_loadGameData();
     </script>
 </body>
-</html>
+    </html>
+    
